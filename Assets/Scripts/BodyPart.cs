@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class BodyPart : MonoBehaviour
 {
-    public BodyPartDef bodyPartDef;
+    public BodyPartDef BodyPartDef;
 
-    public float hp;
+    public float Hp;
 
-    public float enegy;
-    public float maxEnegy;
+    public float Enegy;
+    public float MaxEnegy;
 
-    public float coverage;
+    public float Coverage;
 
-    public BodyPart parent;
+    public BodyPart Parent;
 
-    public bool IsDestroyed => hp == 0;
+    public bool IsDestroyed => Hp == 0;
 
 
 

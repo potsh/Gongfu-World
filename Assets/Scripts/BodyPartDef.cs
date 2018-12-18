@@ -5,19 +5,19 @@ using UnityEngine;
 public class BodyPartDef
 {
 
-    public bool isLethalAfterDestroyed;
+    public bool IsLethalAfterDestroyed;
 
-    public float maxHp;
+    public float MaxHp;
 
-    public float painPerHp;
+    public float PainPerHp;
 
-    public float bleedRate;
+    public float BleedRate;
 
-    private bool isSkinCovered;
+    private bool _isSkinCovered;
 
-    private bool isSolid;
+    private bool _isSolid;
 
-    public bool idDestroyable = true;
+    public bool IdDestroyable = true;
 
 
 

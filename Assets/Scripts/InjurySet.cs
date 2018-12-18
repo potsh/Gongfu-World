@@ -5,7 +5,7 @@ using UnityEngine;
 public class InjurySet : MonoBehaviour
 {
 
-    public Character character;
+    public Character Character;
 
     public List<Injury> Injuries = new List<Injury>();
 

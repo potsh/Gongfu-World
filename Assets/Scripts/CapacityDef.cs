@@ -2,7 +2,7 @@
 
 public class CapacityDef
 {
-    public bool zeroIfCannotBeAwake;
+    public bool ZeroIfCannotBeAwake;
 
     public float Value;
 }

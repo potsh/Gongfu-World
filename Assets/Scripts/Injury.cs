@@ -5,20 +5,20 @@ using UnityEngine;
 public class Injury : MonoBehaviour
 {
 
-    public float hp;
+    public float Hp;
 
-    private float painPerHp;
+    private float _painPerHp;
 
-    private float bleedPerHp;
+    private float _bleedPerHp;
 
-    public bool canMerge;
+    public bool CanMerge;
 
-    public BodyPart part;
+    public BodyPart Part;
 
-    public int source; //todo
+    public int Source; //todo
 
-    public float Pain => hp * painPerHp;
+    public float Pain => Hp * _painPerHp;
 
-    public float BleedRate => hp * bleedPerHp;
+    public float BleedRate => Hp * _bleedPerHp;
 
 }

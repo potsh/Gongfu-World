@@ -5,12 +5,15 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    private string Name;
+    private string _name;
 
-    private Health health;
-    private Gongfu gongfu;
+    private CharHealth _health;
 
-    private Dictionary<int, int> aptitudeDict;
+    private CharGongfu _gongfu;
+
+    private Dictionary<int, int> _aptitudeDict; //资质
+
+
 
 
 
