@@ -19,9 +19,9 @@ public class Capacities //身体健康状况能力因子
 
     public CapacityDef Breathing;  // △ 依赖因素：肺、颈部、胸腔   △ 影响其他：影响内力转化真气的速率、内力回复速率、影响意识、移动
 
-    public CapacityDef BloodFiltration;  // △ 依赖因素：肾脏、肝脏   △ 影响其他：
+    public CapacityDef BloodFiltration;  // △ 依赖因素：肾脏、肝脏   △ 影响其他：解毒速率、疗伤速率、影响意识
 
-    public CapacityDef BloodPumping;  // △ 依赖因素：心脏  △ 影响其他：
+    public CapacityDef BloodPumping;  // △ 依赖因素：心脏  △ 影响其他：影响意识、移动、影响内力转化真气的速率
 
-    public CapacityDef Metabolism;  // △ 依赖因素：胃
+    public CapacityDef Metabolism;  // △ 依赖因素：胃  △ 影响其他：影响药物、食物的吸收效率
 }

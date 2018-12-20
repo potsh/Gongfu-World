@@ -7,15 +7,15 @@ public class Character : MonoBehaviour
 {
     private string _name;
 
-    private CharHealth _health;
+    public CharHealth Health;
 
-    private CharGongfu _gongfu;
+    public CharGongfa Gongfa;
 
-    private Dictionary<int, int> _aptitudeDict; //资质
+    public Dictionary<int, int> AptitudeDict; //资质
 
+    public CharPrimaryAttr PrimaryAttr;
 
-
-
+    public CharEnegy EnegyHandle;
 
 
 

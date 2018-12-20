@@ -23,7 +23,8 @@ class CharEnegy
 
     private float _movingEnegy;
 
-
+    public int FlowEnegy;
+    public int StrengthAdd;
 
 }
 
