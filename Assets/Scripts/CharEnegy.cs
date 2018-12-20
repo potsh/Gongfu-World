@@ -4,27 +4,26 @@ using System.Linq;
 using System.Text;
 
 
-class CharEnegy
+public class CharEnegy
 {
 
-    private float _maxEnegy;
+    public int MaxEnegy = 0;
 
-    private float _enegy;
-
-
-    private float _enegyFlowRate;
-
-    private float _maxFlowEnegy;
-
-    private float _flowEnety;
+    public int Enegy = 0;
 
 
-    private float _protectEnegy;
+    public int EnegyFlowRate = 0;
 
-    private float _movingEnegy;
+    public int MaxFlowEnegy = 0;
 
-    public int FlowEnegy;
-    public int StrengthAdd;
+    public int FlowEnegy = 0;
+    public int StrengthAdd = 0;
+
+    public int ProtectEnegy = 0;
+    public int ConstitutionAdd = 0;
+
+    public int MovingEnegy = 0;
+    public int DexterityAdd = 0;
 
 }
 
