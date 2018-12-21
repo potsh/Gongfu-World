@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2018 rel. 2 (x64) (http://www.altova.com) by MESMERiZE (MSM) -->
+<Character>
+	<Name>testPlayer1</Name>
+	<Health>
+		<Hp>500</Hp>
+	</Health>
+	<Gongfa>
+		<dict>
+			<GongfaTypeEnum>拳掌</GongfaTypeEnum>
+			<list>
+				<li>
+					<Name>戳眼抓耳攻</Name>
+				</li>
+				<li>
+					<Name>龙爪手</Name>
+				</li>
+			</list>
+		</dict>
+	</Gongfa>
+</Character>
