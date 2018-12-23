@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace Gongfu_World_Console
 {
-    class Program
+    /*class Program
     {
         static void Main(string[] args)
         {
@@ -29,6 +29,52 @@ namespace Gongfu_World_Console
 
            
 
+        }
+    }*/
+
+    class Program
+    {
+        static void OtherClassMethod()
+        {
+            Console.WriteLine("Delegate an other class's method");
+        }
+
+        static void Main(string[] args)
+        {
+            var test = new TestDelegate();
+            test.delegateMethod = new TestDelegate.DelegateMethod(test.NonStaticMethod);
+            test.delegateMethod += new TestDelegate.DelegateMethod(TestDelegate.StaticMethod);
+            test.delegateMethod += Program.OtherClassMethod;
+            test.RunDelegateMethods();
+
+            Console.ReadLine();
+        }
+    }
+
+    class TestDelegate
+    {
+        public delegate void DelegateMethod(); //声明了一个Delegate Type
+
+        public DelegateMethod delegateMethod; //声明了一个Delegate对象
+
+        public static void StaticMethod()
+        {
+            Console.WriteLine("Delegate a static method");
+        }
+
+        public void NonStaticMethod()
+        {
+            Console.WriteLine("Delegate a non-static method");
+        }
+
+        public void RunDelegateMethods()
+        {
+            if (delegateMethod != null)
+            {
+                Console.WriteLine("---------");
+                delegateMethod.Invoke();
+
+            }
         }
     }
 }
