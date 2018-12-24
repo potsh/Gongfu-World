@@ -1,0 +1,35 @@
+{
+  "Name": "testPlayer",
+  "Health": {
+    "InjurySet": {
+      "Injuries": []
+    },
+    "Hp": 200.0,
+    "Downed": false,
+    "Dead": false,
+    "Awake": true,
+    "InPainShock": false
+  },
+  "Gongfa": {
+    "GongfaDict": {}
+  },
+  "AptitudeDict": {
+    "拳掌": 45,
+    "内功": 55
+  },
+  "EnegyHandle": {
+    "MaxEnegy": 0,
+    "Enegy": 0,
+    "MaxFlowEnegy": 0,
+    "FlowEnegy": 0,
+    "StrengthAdd": 0,
+    "EnegyFlowRate": 0,
+    "MaxProtectEnegy": 0,
+    "ProtectEnegy": 0,
+    "ConstitutionAdd": 0,
+    "MaxMovingEnegy": 0,
+    "MovingEnegy": 0,
+    "DexterityAdd": 0
+  },
+  "PrimaryAttr": {}
+}

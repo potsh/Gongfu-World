@@ -1,6 +1,9 @@
 ﻿
+using Newtonsoft.Json;
+
 public class CharPrimaryAttr
 {
+    [JsonIgnore]
     public Character Ch;
 
     private int _bornStrength = 50;

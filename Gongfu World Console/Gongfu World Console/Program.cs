@@ -4,77 +4,34 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace Gongfu_World_Console
 {
-    /*class Program
+    class Program
     {
         static void Main(string[] args)
         {
             string rootPath = "D:/__Study/Projects/Unity3d/Gongfu-World/Assets/";
-            string dataPath = rootPath + "Data/";
+            string dataPath = rootPath + "Saves/";
 
             Character ch = new Character("testPlayer".ToString());
+            ch.AptitudeDict.Add(GongfaTypeEnum.拳掌, 45);
+            ch.AptitudeDict.Add(GongfaTypeEnum.内功, 55);
 
-            XmlSerializer serializer = new XmlSerializer(ch.GetType());
-            TextWriter writer = new StreamWriter(dataPath + ch.Name + ".xml");
-            serializer.Serialize(writer, ch);
-            writer.Close();
+            string jsonData = JsonConvert.SerializeObject(ch, Formatting.Indented);
+            Console.WriteLine(jsonData);
+
+            File.WriteAllText(dataPath + ch.Name + ".json", jsonData);
+
+            Console.WriteLine();
 
 
-            //XmlDocument xml = new XmlDocument();
-            //xml.Load(dataPath + "CharacterPlayer.xml");
-
-           
-
-        }
-    }*/
-
-    class Program
-    {
-        static void OtherClassMethod()
-        {
-            Console.WriteLine("Delegate an other class's method");
-        }
-
-        static void Main(string[] args)
-        {
-            var test = new TestDelegate();
-            test.delegateMethod = new TestDelegate.DelegateMethod(test.NonStaticMethod);
-            test.delegateMethod += new TestDelegate.DelegateMethod(TestDelegate.StaticMethod);
-            test.delegateMethod += Program.OtherClassMethod;
-            test.RunDelegateMethods();
+            Character ch2 = JsonConvert.DeserializeObject<Character>(jsonData);
+            string jsonData2 = JsonConvert.SerializeObject(ch2, Formatting.Indented);
+            Console.WriteLine(jsonData2);
 
             Console.ReadLine();
-        }
-    }
-
-    class TestDelegate
-    {
-        public delegate void DelegateMethod(); //声明了一个Delegate Type
-
-        public DelegateMethod delegateMethod; //声明了一个Delegate对象
-
-        public static void StaticMethod()
-        {
-            Console.WriteLine("Delegate a static method");
-        }
-
-        public void NonStaticMethod()
-        {
-            Console.WriteLine("Delegate a non-static method");
-        }
-
-        public void RunDelegateMethods()
-        {
-            if (delegateMethod != null)
-            {
-                Console.WriteLine("---------");
-                delegateMethod.Invoke();
-
-            }
         }
     }
 }

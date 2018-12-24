@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public class InjurySet
 {
-
+    [JsonIgnore]
     public Character Ch;
 
     public List<Injury> Injuries = new List<Injury>();
 
+    [JsonIgnore]
     public float PainTotal
     {
         get
@@ -22,6 +24,7 @@ public class InjurySet
         }
     }
 
+    [JsonIgnore]
     public float BleedRateTotal
     {
         get

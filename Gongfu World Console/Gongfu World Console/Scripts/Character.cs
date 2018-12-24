@@ -8,13 +8,13 @@ public class Character
 
     public CharHealth Health;
 
-    /*public CharGongfa Gongfa;
+    public CharGongfa Gongfa;
 
-    public Dictionary<GongfaTypeEnum, int> AptitudeDict;*/ //资质
+    public Dictionary<GongfaTypeEnum, int> AptitudeDict; //资质
 
     public CharEnegy EnegyHandle;
 
-    //public CharPrimaryAttr PrimaryAttr;
+    public CharPrimaryAttr PrimaryAttr;
 
     public Character()
     {
@@ -24,10 +24,10 @@ public class Character
     {
         Name = name;
         Health = new CharHealth(this);
-        /*Gongfa = new CharGongfa(this);
-        AptitudeDict = new Dictionary<GongfaTypeEnum, int>();*/
+        Gongfa = new CharGongfa(this);
+        AptitudeDict = new Dictionary<GongfaTypeEnum, int>();
         EnegyHandle = new CharEnegy(this);
-        //PrimaryAttr = new CharPrimaryAttr(this);
+        PrimaryAttr = new CharPrimaryAttr(this);
     }
 
 }
