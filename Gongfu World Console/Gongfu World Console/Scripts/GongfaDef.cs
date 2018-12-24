@@ -27,7 +27,7 @@ public class GongfaDef
 
     public float BaseClever;
 
-
+    
 
     public float CalcEfficiency()
     {
