@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Gongfu_World_Console.Scripts;
 
 public class Character
 {

@@ -1,30 +1,45 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
-public class BodyPartDef
+namespace Gongfu_World_Console.Scripts
 {
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum BodyPartDepthEnum
+    {
+        Undefined,
+        Outside,
+        Inside
+    }
 
-    public bool IsLethalAfterDestroyed;
+    public class BodyPartDef
+    {
 
-    public float MaxHp;
+        public BodyPartEnum Name;
 
-    public float PainPerHp;
+        public string Parent;
 
-    public float BleedRate;
+        public float Coverage;
 
-    private bool _isSkinCovered;
+        public BodyPartDepthEnum Depth;
 
-    private bool _isSolid;
+        public float MaxHp;
 
-    public bool IdDestroyable = true;
+        public float DamageMulti;
 
+        public float PainPerHp;
 
+        public bool IsLethalAfterDestroyed;
 
+        public float BleedRate;
 
+//    public bool IsSolid;
 
+        public bool NotDestroyable;
 
+        public BodyPartEnum SymmetryPart;
 
-
-
-
+    }
 }

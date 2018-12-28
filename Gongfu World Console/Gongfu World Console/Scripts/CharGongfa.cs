@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Gongfu_World_Console.Scripts;
 using Newtonsoft.Json;
 
 public class CharGongfa
@@ -16,4 +17,5 @@ public class CharGongfa
     {
         Ch = ch;
     }
+
 }
