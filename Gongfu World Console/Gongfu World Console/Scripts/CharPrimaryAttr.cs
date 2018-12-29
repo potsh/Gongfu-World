@@ -6,17 +6,17 @@ public class CharPrimaryAttr
     [JsonIgnore]
     public Character Ch;
 
-    private int _bornStrength = 50;
-    private int _bornDexterity = 50;
-    private int _bornConstitution = 50;
-    private int _bornComprehension = 50;
-    private int _bornWillpower = 50;
+    public int BornStrength = 50;
+    public int BornDexterity = 50;
+    public int BornConstitution = 50;
+    public int BornComprehension = 50;
+    public int BornWillpower = 50;
 
-    private int _strength;
-    private int _dexterity;
-    private int _constitution;
-    private int _comprehension;
-    private int _willpower;
+    public int Strength;
+    public int Dexterity;
+    public int Constitution;
+    public int Comprehension;
+    public int Willpower;
 
     public CharPrimaryAttr()
     {
@@ -37,16 +37,16 @@ public class CharPrimaryAttr
 
     public void CalcStrength()
     {
-        _strength = _bornStrength + Ch.EnegyHandle.StrengthAdd;
+        Strength = BornStrength + Ch.Enegy.StrengthAdd;
     }
 
     public void CalcConstitution()
     {
-        _constitution = _bornConstitution + Ch.EnegyHandle.ConstitutionAdd;
+        Constitution = BornConstitution + Ch.Enegy.ConstitutionAdd;
     }
 
     public void CalcDexterity()
     {
-        _dexterity = _bornDexterity + Ch.EnegyHandle.DexterityAdd;
+        Dexterity = BornDexterity + Ch.Enegy.DexterityAdd;
     }
 }

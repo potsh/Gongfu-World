@@ -15,6 +15,8 @@ namespace Gongfu_World_Console.Scripts
 
         public static Dictionary<object, BodyPartDef> BodyPartDefData;
 
+        public static Dictionary<object, CharacterData> CharacterTableData;
+
 
 
         public static bool LoadData()
@@ -31,6 +33,12 @@ namespace Gongfu_World_Console.Scripts
                 return false;
             }
 
+            CharacterTableData = (Dictionary<object, CharacterData>)CsvUtil<CharacterData>.LoadObjectsToDict<CharacterData>(Find.DataCsvPath + "CharacterData.csv");
+            if (CharacterTableData == null)
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -39,6 +47,11 @@ namespace Gongfu_World_Console.Scripts
             bool ret = CsvUtil<GongfaDef>.CheckCorrectness(GongfaDefData.Values);
 
             if (!CsvUtil<BodyPartDef>.CheckCorrectness(BodyPartDefData.Values))
+            {
+                ret = false;
+            }
+
+            if (!CsvUtil<CharacterData>.CheckCorrectness(CharacterTableData.Values))
             {
                 ret = false;
             }

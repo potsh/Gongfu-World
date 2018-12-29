@@ -8,7 +8,7 @@ public class CharGongfa
     [JsonIgnore]
     public Character Ch;
 
-    public Dictionary<GongfaTypeEnum, List<GongfaDef>> GongfaDict = new Dictionary<GongfaTypeEnum, List<GongfaDef>>();
+    public Dictionary<GongfaTypeEnum, Dictionary<string, GongfaDef>> GongfaDict = new Dictionary<GongfaTypeEnum, Dictionary<string, GongfaDef>>();
 
     public CharGongfa()
     {

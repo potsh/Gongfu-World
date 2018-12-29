@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class GongfaDef
 {
-
     public string Name;
 
     public GongfaTypeEnum GongfaType;
@@ -27,7 +26,6 @@ public class GongfaDef
     public float BaseSpeed;
 
     public float BaseClever;
-
 
 
     public float CalcEfficiency()

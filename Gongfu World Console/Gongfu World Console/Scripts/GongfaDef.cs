@@ -28,7 +28,7 @@ namespace Gongfu_World_Console.Scripts
 
         public int BaseEnegyCost;
 
-        public int ActionCost;
+        public int BaseActionCost;
 
         public float MaxEfficiency;
 
@@ -85,7 +85,7 @@ namespace Gongfu_World_Console.Scripts
         public GongfaRequirement ReqAptitude;
 
 
-        public float CalcEfficiency()
+        public float CalcEfficiency(Character ch)
         {
             return 1.0f;
         }

@@ -417,13 +417,13 @@ namespace Gongfu_World_Console.Scripts
                 _fieldDictOfT[colName].SetValue(destObject, typedVal);
                 return true;
             }
-            else if (_propertyDictOfT.ContainsKey(colName))
+            /*else if (_propertyDictOfT.ContainsKey(colName))
             {
 
                 var typedVal = StringToObject(val, _propertyDictOfT[colName].PropertyType);                              
                 _propertyDictOfT[colName].SetValue(destObject, typedVal, null);
                 return true;
-            }
+            }*/
 
             return false;
         }

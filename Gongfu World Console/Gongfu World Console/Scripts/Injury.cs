@@ -6,9 +6,9 @@ public class Injury
 
     public float Hp;
 
-    private float _painPerHp;
+    private float _painPerHp = 1.0f;
 
-    private float _bleedPerHp;
+    private float _bleedPerHp = 0f; 
 
     public bool CanMerge;
 

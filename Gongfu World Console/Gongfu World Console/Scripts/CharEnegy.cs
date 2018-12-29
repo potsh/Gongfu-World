@@ -16,7 +16,8 @@ public class CharEnegy
     public int MaxFlowEnegy = 0;
     public int FlowEnegy = 0;
     public int StrengthAdd = 0;
-    public int EnegyFlowRate = 0;
+
+    public int EnegyFlowSpeed = 0;
 
     public int MaxProtectEnegy = 0;
     public int ProtectEnegy = 0;

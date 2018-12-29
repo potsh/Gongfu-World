@@ -16,13 +16,13 @@ namespace Gongfu_World_Console
     {
         static void Main(string[] args)
         {
-            string rootPath = "D:/__Study/Projects/Unity3d/Gongfu-World/Assets/";
-            string dataPath = rootPath + "Saves/";
-            string gongfaDefPath = @"D:\__Study\Projects\Unity3d\Gongfu-World\Assets\Data\csv\功法数据表.csv";
+            //string rootPath = "D:/__Study/Projects/Unity3d/Gongfu-World/Assets/";
+            //string dataPath = rootPath + "Saves/";
+            //string gongfaDefPath = @"D:\__Study\Projects\Unity3d\Gongfu-World\Assets\Data\csv\功法数据表.csv";
 
-            Character ch = new Character("testPlayer".ToString());
-            ch.AptitudeDict.Add(GongfaTypeEnum.拳掌, 45);
-            ch.AptitudeDict.Add(GongfaTypeEnum.内功, 55);
+            //Character ch = new Character("testPlayer".ToString());
+            //ch.AptitudeDict.Add(GongfaTypeEnum.拳掌, 45);
+            //ch.AptitudeDict.Add(GongfaTypeEnum.内功, 55);
 
 
             //Console.WriteLine(typeof(Dictionary<GongfaTypeEnum, int>));
