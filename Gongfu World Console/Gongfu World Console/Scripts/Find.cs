@@ -9,7 +9,9 @@ namespace Gongfu_World_Console.Scripts
 {
     public static class Find
     {
-        public static string RootPath = "D:/__Study/Projects/Unity3d/Gongfu-World/Assets/";
+        //public static string RootPath = "D:/__Study/Projects/Unity3d/Gongfu-World/Assets/";
+
+        public static string RootPath = "../../../../Assets/";
 
         public static string DataPath => RootPath + "Data/";
 

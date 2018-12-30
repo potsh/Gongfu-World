@@ -32,7 +32,7 @@ public class Character
         PrimaryAttr = new CharPrimaryAttr(this);
     }
 
-    public static Character CreateCharacterFromData(CharacterData cd)
+    public Character (CharacterData cd)
     {
         Character ch = new Character(cd.Name);
 
@@ -51,7 +51,6 @@ public class Character
         ch.PrimaryAttr.Comprehension = cd.Comprehension;
         ch.PrimaryAttr.Willpower = cd.Willpower;
 
-        return ch;
     }
 
 }
