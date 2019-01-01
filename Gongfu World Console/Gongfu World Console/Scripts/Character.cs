@@ -51,6 +51,7 @@ public class Character
         ch.PrimaryAttr.Comprehension = cd.Comprehension;
         ch.PrimaryAttr.Willpower = cd.Willpower;
 
+        ch.Gongfa.LoadGongfaFromData(cd);
     }
 
 }

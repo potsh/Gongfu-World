@@ -32,6 +32,8 @@ namespace Gongfu_World_Console
             Console.WriteLine("Data loaded successfully: {0}", Data.LoadData());
             Console.WriteLine("All csv file imported correctly: {0}", Data.CheckData());
 
+            Character ch = new Character(Data.CharacterTableData.First().Value);
+
 
 
 

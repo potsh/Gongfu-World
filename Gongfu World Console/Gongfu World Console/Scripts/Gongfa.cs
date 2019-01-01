@@ -9,28 +9,28 @@ namespace Gongfu_World_Console
 {
     public class Gongfa
     {
-        private Character ch;
+        public Character Ch;
 
-        public GongfaDef gongfaDef;
+        public GongfaDef GongfaDef;
 
         public int Exp;
 
-        public float LearnProgress = 1.0f;
+        public float LearnProgress => Math.Min( (float)Exp / GongfaDef.Exp, 1.0f );
 
-        public int EnegyCost => gongfaDef.BaseEnegyCost;
+        public int EnegyCost => GongfaDef.BaseEnegyCost;
 
-        public int ActionCost => gongfaDef.BaseActionCost;
+        public int ActionCost => GongfaDef.BaseActionCost;
 
-        public float Efficiency => Math.Min(LearnProgress, gongfaDef.CalcEfficiency(ch));
+        public float Efficiency => Math.Min(LearnProgress, GongfaDef.CalcEfficiency(Ch));
 
-        public float PhyDamage => gongfaDef.BasePhyDamage * Efficiency;
+        public float PhyDamage => GongfaDef.BasePhyDamage * Efficiency;
 
-        public float EngDamage => gongfaDef.BaseEngDamage * Efficiency;
+        public float EngDamage => GongfaDef.BaseEngDamage * Efficiency;
 
-        public float Power => gongfaDef.BasePower* Efficiency;
+        public float Power => GongfaDef.BasePower* Efficiency;
 
-        public float Speed => gongfaDef.BaseSpeed * Efficiency;
+        public float Speed => GongfaDef.BaseSpeed * Efficiency;
 
-        public float Clever => gongfaDef.BaseClever * Efficiency;
+        public float Clever => GongfaDef.BaseClever * Efficiency;
     }
 }

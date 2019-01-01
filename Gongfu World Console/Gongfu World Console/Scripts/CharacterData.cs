@@ -25,5 +25,13 @@ namespace Gongfu_World_Console
         public int Constitution;
         public int Comprehension;
         public int Willpower;
+
+        public Dictionary<string, int> Learned内功;
+        public Dictionary<string, int> Learned身法;
+        public Dictionary<string, int> Learned绝技;
+        public Dictionary<string, int> Learned拳掌;
+        public Dictionary<string, int> Learned腿法;
+
+
     }
 }

@@ -12,9 +12,7 @@ namespace Gongfu_World_Console.Scripts
         身法,
         绝技,
         拳掌,
-        剑法,
-        刀法,
-        腿法
+        腿法,
     }
 
     public class GongfaDef : ILoadFromLine
@@ -25,6 +23,8 @@ namespace Gongfu_World_Console.Scripts
         public GongfaTypeEnum GongfaType;
 
         public int Level;
+
+        public int Exp;
 
         public int BaseEnegyCost;
 
