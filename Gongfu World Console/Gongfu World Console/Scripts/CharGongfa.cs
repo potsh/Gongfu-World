@@ -60,7 +60,7 @@ public class CharGongfa
         foreach (GongfaTypeEnum eValue in Enum.GetValues(typeof(GongfaTypeEnum)))
         {
             string eName = Enum.GetName(typeof(GongfaTypeEnum), eValue);
-            string fName = "learned" + eName;
+            string fName = "Learned" + eName;
             foreach (var f in fi)
             {
                 if (f.Name == fName)

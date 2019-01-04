@@ -25,7 +25,7 @@ namespace Gongfu_World_Console.Scripts
 
         public BodyPartDepthEnum Depth;
 
-        public float MaxHp;
+        public int MaxHp;
 
         public float DamageMulti;
 

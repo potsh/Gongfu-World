@@ -1,25 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Gongfu_World_Console.Scripts;
+﻿using System;
 
-public class BodyPart
+namespace Gongfu_World_Console.Scripts
 {
-    public BodyPartDef BodyPartDef;
-
-    public float Hp;
-
-    public float Enegy;
-    public float MaxEnegy;
-
-    public float Coverage;
-
-    public BodyPart Parent;
-
-    public bool IsDestroyed
+    public class BodyPart
     {
-        get
-        {
-            return Hp == 0;
+        public Body Body;
+
+        public BodyPartDef BodyPartDef;
+
+        public int MaxHp => (int)(BodyPartDef.MaxHp * HealthScale);
+
+        public int Hp;
+
+        public float PartHealthScale;
+
+        public float HealthScale => Body.Ch.Health.HealthScale * (1 + PartHealthScale);
+
+        public BodyPart Parent;
+
+
+        public BodyPart(BodyPartEnum partType)
+        {   
+            BodyPartDef = Data.BodyPartDefData[Enum.GetName(typeof(BodyPartEnum), partType) ?? throw new InvalidOperationException()];
         }
+
+        private void Init()
+        {
+            Hp = MaxHp;
+        }
+
+        public bool IsDestroyed => Hp == 0;
     }
 }

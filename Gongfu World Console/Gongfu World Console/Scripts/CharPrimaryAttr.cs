@@ -49,4 +49,5 @@ public class CharPrimaryAttr
     {
         Dexterity = BornDexterity + Ch.Enegy.DexterityAdd;
     }
+
 }
