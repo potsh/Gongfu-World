@@ -26,7 +26,7 @@ namespace Gongfu_World_Console.Scripts
 
         public int Exp;
 
-        public int BaseEnegyCost;
+        public int BaseEnergyCost;
 
         public int BaseActionCost;
 
@@ -58,20 +58,20 @@ namespace Gongfu_World_Console.Scripts
 
         public class GongfaRequirement : ILoadFromString
         {
-            public int baseReqValue;
-            public float weight;
+            public int BaseReqValue;
+            public float Weight;
 
             string ILoadFromString.ToString()
             {
-                return (baseReqValue + "," + weight.ToString("0.##")).ToString();
+                return (BaseReqValue + "," + Weight.ToString("0.##")).ToString();
             }
 
             object ILoadFromString.StringToObject(string str)
             {
                 string[] subStrs = str.Split(',');
 
-                baseReqValue = (int)CsvUtil<GongfaDef>.ParseString(subStrs[0], typeof(int));
-                weight = (float)CsvUtil<GongfaDef>.ParseString(subStrs[1], typeof(float));
+                BaseReqValue = (int)CsvUtil<GongfaDef>.ParseString(subStrs[0], typeof(int));
+                Weight = (float)CsvUtil<GongfaDef>.ParseString(subStrs[1], typeof(float));
 
                 return this;
             }
@@ -80,6 +80,7 @@ namespace Gongfu_World_Console.Scripts
         public GongfaRequirement ReqStrength;
         public GongfaRequirement ReqDexterity;
         public GongfaRequirement ReqConstitution;
+        public GongfaRequirement ReqVitality;
         public GongfaRequirement ReqComprehension;
         public GongfaRequirement ReqWillpower;
         public GongfaRequirement ReqAptitude;
@@ -87,7 +88,46 @@ namespace Gongfu_World_Console.Scripts
 
         public float CalcEfficiency(Character ch)
         {
-            return 1.0f;
+            float e = 0.0f;
+
+            if (ReqStrength != null)
+            {
+                e += (float)(ch.PrimaryAttr.Strength) / ReqStrength.BaseReqValue * ReqStrength.Weight;
+            }
+
+            if (ReqDexterity != null)
+            {
+                e += (float)(ch.PrimaryAttr.Dexterity) / ReqDexterity.BaseReqValue * ReqDexterity.Weight;
+            }
+
+            if (ReqConstitution != null)
+            {
+                e += (float)(ch.PrimaryAttr.Constitution) / ReqConstitution.BaseReqValue * ReqConstitution.Weight;
+            }
+
+            if (ReqVitality != null)
+            {
+                e += (float)(ch.PrimaryAttr.Vitality) / ReqVitality.BaseReqValue * ReqVitality.Weight;
+            }
+
+            if (ReqComprehension != null)
+            {
+                e += (float)(ch.PrimaryAttr.Comprehension) / ReqComprehension.BaseReqValue * ReqComprehension.Weight;
+            }
+
+            if (ReqWillpower != null)
+            {
+                e += (float)(ch.PrimaryAttr.Willpower) / ReqWillpower.BaseReqValue * ReqWillpower.Weight;
+            }
+
+            if (ReqAptitude != null)
+            {
+                e += (float)(ch.AptitudeDict[GongfaType]) / ReqAptitude.BaseReqValue * ReqAptitude.Weight;
+            }
+
+
+
+            return e;
         }
 
 

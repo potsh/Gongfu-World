@@ -121,14 +121,21 @@ namespace Gongfu_World_Console.Scripts
                     else if (fieldList.First() == "变量名称")
                     {
                         _fieldNameDict = ParseHeader(fieldList);
+                        foreach (var item in _fieldDictOfT.ToList())
+                        {
+                            if (!_fieldNameDict.ContainsKey(item.Key))
+                            {
+                                _fieldDictOfT.Remove(item.Key);
+                            }
+                        }
                     }
                     else if (fieldList.First() == "变量类型")
                     {
                         for (int i = 1; i < fieldList.Count(); i++)
                         {
                             fieldList[i] = fieldList[i].Trim();
-                            _fieldTypeList = fieldList;
                         }
+                        _fieldTypeList = fieldList;
                     }
                     else if (fieldList.First() == "BEGIN")
                     {
@@ -588,6 +595,9 @@ namespace Gongfu_World_Console.Scripts
                                             bool firstCol = true;
                                             foreach (FieldInfo f in _fieldDictOfT.Values)
                                             {
+                                                if (!_fieldNameDict.ContainsKey(f.Name))
+                                                    continue;
+
                                                 // Good CSV files don't have a trailing comma so only add here
                                                 if (firstCol)
                                                     firstCol = false;

@@ -55,7 +55,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Scripts\Body.cs" />
+    <Compile Include="Scripts\ByCalcAttribute.cs" />
     <Compile Include="Scripts\CharacterData.cs" />
+    <Compile Include="Scripts\DamageDef.cs" />
+    <Compile Include="Scripts\DamageDefOf.cs" />
+    <Compile Include="Scripts\DamageWorker.cs" />
     <Compile Include="Scripts\EncodingType.cs" />
     <Compile Include="Scripts\Gongfa.cs" />
     <Compile Include="Scripts\Data.cs" />
@@ -70,7 +74,7 @@
     <Compile Include="Scripts\CapacityDefOf.cs" />
     <Compile Include="Scripts\Character.cs" />
     <Compile Include="Scripts\CharacterDef.cs" />
-    <Compile Include="Scripts\CharEnegy.cs" />
+    <Compile Include="Scripts\CharEnergy.cs" />
     <Compile Include="Scripts\CharGongfa.cs" />
     <Compile Include="Scripts\CharHealth.cs" />
     <Compile Include="Scripts\CharPrimaryAttr.cs" />

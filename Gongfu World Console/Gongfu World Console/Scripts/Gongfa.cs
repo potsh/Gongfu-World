@@ -4,24 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Gongfu_World_Console.Scripts;
+using Newtonsoft.Json;
 
 namespace Gongfu_World_Console
 {
     public class Gongfa
     {
+        [JsonIgnore]
         public Character Ch;
 
+        [JsonIgnore]
         public GongfaDef GongfaDef;
 
         public int Exp;
 
         public float LearnProgress => Math.Min( (float)Exp / GongfaDef.Exp, 1.0f );
 
-        public int EnegyCost => GongfaDef.BaseEnegyCost;
+        public int EnergyCost => GongfaDef.BaseEnergyCost;
 
         public int ActionCost => GongfaDef.BaseActionCost;
 
-        public float Efficiency => Math.Min(LearnProgress, GongfaDef.CalcEfficiency(Ch));
+        public float Efficiency => Math.Min(LearnProgress * GongfaDef.CalcEfficiency(Ch), GongfaDef.MaxEfficiency);
 
         public float PhyDamage => GongfaDef.BasePhyDamage * Efficiency;
 

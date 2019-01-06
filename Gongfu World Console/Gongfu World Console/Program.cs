@@ -56,14 +56,15 @@ namespace Gongfu_World_Console
             //            }
 
 
-            //            string jsonData = JsonConvert.SerializeObject(ch.AptitudeDict, Formatting.Indented);
-//            JsonSerializerSettings jsSeting =  new JsonSerializerSettings
-//                {
-//                NullValueHandling = NullValueHandling.Ignore, TypeNameHandling = TypeNameHandling.None,
-//                DefaultValueHandling = DefaultValueHandling.Ignore               
-//            };
-//            string jsonData = JsonConvert.SerializeObject(gongfaDict, Formatting.Indented, jsSeting);
-//            Console.WriteLine(jsonData);
+            
+            JsonSerializerSettings jsSeting =  new JsonSerializerSettings
+                {
+                NullValueHandling = NullValueHandling.Ignore, TypeNameHandling = TypeNameHandling.None,
+                DefaultValueHandling = DefaultValueHandling.Ignore               
+            };
+            //string jsonData = JsonConvert.SerializeObject(gongfaDict, Formatting.Indented, jsSeting);
+            string jsonData = JsonConvert.SerializeObject(ch, Formatting.Indented, jsSeting);
+            Console.WriteLine(jsonData);
 
             //File.WriteAllText(dataPath + ch.Name + ".json", jsonData);
 

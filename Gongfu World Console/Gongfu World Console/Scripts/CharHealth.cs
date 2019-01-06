@@ -9,13 +9,13 @@ public class CharHealth
     [JsonIgnore]
     public Character Ch;
 
-    public Dictionary<BodyPartEnum, BodyPart> BodyPartDict;
+    public Body Body;
 
     public InjurySet InjurySet;
 
-    public float MaxHp => CharacterDef.BaseHp * HealthScale;
+    public int MaxHp => (int)(CharacterDef.BaseHp * HealthScale);
 
-    public float Hp;
+    public int Hp;
 
     public bool Downed = false;
 
@@ -25,7 +25,26 @@ public class CharHealth
 
     public bool InPainShock => InjurySet.PainTotal >= 0.8;
 
-    public float HealthScale => 0.02f * Ch.PrimaryAttr.Constitution + 1;
+    public float HealthScale => 0.04f * Ch.PrimaryAttr.Constitution + 1;
+
+    private void Init(Character ch)
+    {
+        Ch = ch;
+        Hp = MaxHp;
+        InjurySet = new InjurySet(ch);
+        Body = new Body(ch);       
+    }
+
+    //从csv导入数据的后处理
+    public void PostLoadData()
+    {
+        Body.Ch = Ch;
+        if (Hp == default(int))
+        {
+            Hp = MaxHp;
+        }
+        Body.PostLoadData();
+    }
 
     public CharHealth()
     {
@@ -33,8 +52,7 @@ public class CharHealth
 
     public CharHealth(Character ch)
     {
-        Ch = ch;
-        InjurySet = new InjurySet(ch);
+        Init(ch);
     }
 
 }

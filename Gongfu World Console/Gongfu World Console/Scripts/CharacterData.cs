@@ -12,7 +12,7 @@ namespace Gongfu_World_Console
 
         public int Hp;
 
-        public int Enegy;
+        public int Energy;
 
         public int 内功;
         public int 身法;
@@ -23,6 +23,7 @@ namespace Gongfu_World_Console
         public int Strength;
         public int Dexterity;
         public int Constitution;
+        public int Vitality;
         public int Comprehension;
         public int Willpower;
 

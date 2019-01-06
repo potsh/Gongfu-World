@@ -32,6 +32,10 @@ namespace Gongfu_World_Console.Scripts
             {
                 return false;
             }
+            LinkAllBodyPartDefs();
+            CalcCoverageRecursively(BodyPartDefData[BodyPartEnum.Body]);
+            CalcCoverageAbsRecursively(BodyPartDefData[BodyPartEnum.Body]);
+            Body.BodyAreaInit();
 
             CharacterTableData = (Dictionary<object, CharacterData>)CsvUtil<CharacterData>.LoadObjectsToDict<CharacterData>(Find.DataCsvPath + "CharacterData.csv");
             if (CharacterTableData == null)
@@ -57,6 +61,51 @@ namespace Gongfu_World_Console.Scripts
             }
 
             return ret;
+        }
+
+        private static void LinkAllBodyPartDefs()
+        {
+            foreach (BodyPartDef partDef in BodyPartDefData.Values)
+            {
+                if (partDef.ParentName == default(BodyPartEnum))
+                {
+                    continue;
+                }
+                partDef.Parent = BodyPartDefData[partDef.ParentName];
+                BodyPartDefData[partDef.ParentName].Children.Add(partDef);
+            }
+        }
+
+        private static void CalcCoverageRecursively(BodyPartDef part)
+        {
+            //BodyPartDef root = BodyPartDefData[BodyPartEnum.Body];
+            float totalCoverageOfChildren = 0;
+            foreach (BodyPartDef childPart in part.Children)
+            {
+                totalCoverageOfChildren += childPart.CoverageAbsWithChildren;
+                CalcCoverageRecursively(childPart);
+            }
+
+            part.Coverage = 1 - totalCoverageOfChildren;
+        }
+
+        private static void CalcCoverageAbsRecursively(BodyPartDef part)
+        {
+            if (part.Parent == null)
+            {
+                part.CoverageAbsWithChildren = 1.0f;
+                part.CoverageAbs = 0.0f;
+            }
+            else
+            {
+                part.CoverageAbsWithChildren = part.Parent.CoverageAbsWithChildren * part.CoverageWithChildren;
+                part.CoverageAbs = part.Parent.CoverageAbsWithChildren * part.Coverage;
+
+                foreach (var child in part.Children)
+                {
+                    CalcCoverageAbsRecursively(child);
+                }                
+            }
         }
     }
 }

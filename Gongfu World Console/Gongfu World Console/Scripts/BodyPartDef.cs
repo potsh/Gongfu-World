@@ -17,11 +17,26 @@ namespace Gongfu_World_Console.Scripts
     public class BodyPartDef
     {
 
-        public BodyPartEnum Name;
+        public BodyPartEnum Name; //Key
 
-        public string Parent;
+        public BodyPartEnum ParentName;
 
+        [ByCalc]
+        public BodyPartDef Parent;
+
+        [ByCalc]
+        public List<BodyPartDef> Children = new List<BodyPartDef>();
+
+        public float CoverageWithChildren;
+
+        [ByCalc]
         public float Coverage;
+
+        [ByCalc]
+        public float CoverageAbsWithChildren;
+
+        [ByCalc]
+        public float CoverageAbs;
 
         public BodyPartDepthEnum Depth;
 
