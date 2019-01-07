@@ -27,7 +27,9 @@ public class CharHealth
 
     public float HealthScale => 0.04f * Ch.PrimaryAttr.Constitution + 1;
 
-    private void Init(Character ch)
+    public float EnergyProtectRate => (float) (Ch.Energy.ProtectEnergy) / MaxHp;
+
+    public void Init(Character ch)
     {
         Ch = ch;
         Hp = MaxHp;

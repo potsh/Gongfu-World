@@ -59,6 +59,7 @@
     <Compile Include="Scripts\CharacterData.cs" />
     <Compile Include="Scripts\DamageDef.cs" />
     <Compile Include="Scripts\DamageDefOf.cs" />
+    <Compile Include="Scripts\DamageInfo.cs" />
     <Compile Include="Scripts\DamageWorker.cs" />
     <Compile Include="Scripts\EncodingType.cs" />
     <Compile Include="Scripts\Gongfa.cs" />

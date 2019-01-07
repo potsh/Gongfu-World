@@ -21,8 +21,6 @@ namespace Gongfu_World_Console.Scripts
     {
         public DamageType DmgType;
 
-        public int PierceAmount;
-
         public float Ignore;
 
         public bool CauseBleed;

@@ -26,9 +26,14 @@ namespace Gongfu_World_Console.Scripts
         [JsonIgnore]
         public List<BodyPart> Children = new List<BodyPart>();
 
-        public BodyPart(BodyPartEnum partType)
+        public bool IsDestroyed => Hp == 0;
+
+        public int PenetrateResist => (int)(BodyPartDef.PenetrateResist * HealthScale);
+
+        public BodyPart(BodyPartEnum partType, Body body)
         {
             BodyPartDef = Data.BodyPartDefData[partType];
+            Body = body;
             Init();
         }
 
@@ -45,6 +50,7 @@ namespace Gongfu_World_Console.Scripts
             Init();
         }
 
-        public bool IsDestroyed => Hp == 0;
+
+
     }
 }

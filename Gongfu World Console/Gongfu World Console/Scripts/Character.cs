@@ -20,13 +20,13 @@ public class Character
 
 
 
-
     private void Init(string name)
     {
         Name = name;
         Energy = new CharEnergy(this);
         PrimaryAttr = new CharPrimaryAttr(this);
-        Health = new CharHealth(this);
+        Health = new CharHealth();
+        Health.Init(this);
         Gongfa = new CharGongfa(this);
         AptitudeDict = new Dictionary<GongfaTypeEnum, int>();
     }
@@ -63,6 +63,25 @@ public class Character
         Gongfa.LoadGongfaFromData(cd);
 
         Health.PostLoadData();
+    }
+
+
+    public void TakeDamage(DamageInfo dInfo)
+    {
+        switch (dInfo.DmgType)
+        {
+            case DamageType.Pierce:
+
+                break;
+            case DamageType.Cut:
+                break;
+            case DamageType.Blunt:
+                break;
+            case DamageType.Energy:
+                break;
+            default:
+                break;
+        }
     }
 
 }

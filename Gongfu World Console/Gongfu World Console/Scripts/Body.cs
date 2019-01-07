@@ -20,35 +20,46 @@ namespace Gongfu_World_Console.Scripts
 
     public static class BodyAreaDef
     {
-        public static List<BodyPartEnum> Up = new List<BodyPartEnum>
+        public static Dictionary<BodyArea, List<BodyPartEnum>> BodyAreaDict = new Dictionary<BodyArea, List<BodyPartEnum>>
         {
-            BodyPartEnum.Head,
-            BodyPartEnum.Neck,
-            BodyPartEnum.Chest,
-            BodyPartEnum.LeftArm,
-            BodyPartEnum.RightArm,
-        };
+            {
+                BodyArea.Up, new List<BodyPartEnum>
+                {
+                    BodyPartEnum.Head,
+                    BodyPartEnum.Neck,
+                    BodyPartEnum.Chest,
+                    BodyPartEnum.LeftArm,
+                    BodyPartEnum.RightArm,
+                }
+            },
 
-        public static List<BodyPartEnum> Middle = new List<BodyPartEnum>
-        {
-            BodyPartEnum.LeftArm,
-            BodyPartEnum.RightArm,
-            BodyPartEnum.Belly,
-            BodyPartEnum.Private,
-        };
+            {
+                BodyArea.Middle, new List<BodyPartEnum>
+                {
+                    BodyPartEnum.LeftArm,
+                    BodyPartEnum.RightArm,
+                    BodyPartEnum.Belly,
+                    BodyPartEnum.Private,
+                }
+            },
 
-        public static List<BodyPartEnum> Down = new List<BodyPartEnum>
-        {
-            BodyPartEnum.LeftLeg,
-            BodyPartEnum.RightLeg,
+            {
+                BodyArea.Down, new List<BodyPartEnum>
+                {
+                    BodyPartEnum.LeftLeg,
+                    BodyPartEnum.RightLeg,
+                }
+            },
         };
     }
 
+ 
     [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
     public class Body
     {
 
-        [JsonIgnore] public Character Ch;
+        [JsonIgnore]
+        public Character Ch;
 
         public Dictionary<BodyPartEnum, BodyPart> AllBodyParts = new Dictionary<BodyPartEnum, BodyPart>();
 
@@ -59,8 +70,7 @@ namespace Gongfu_World_Console.Scripts
             {
                 if (eValue != BodyPartEnum.Undefined)
                 {
-                    BodyPart part = new BodyPart(eValue);
-                    part.Body = this;
+                    BodyPart part = new BodyPart(eValue, this);
                     AllBodyParts.Add(eValue, part);
                 }
             }

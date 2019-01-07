@@ -56,5 +56,9 @@ namespace Gongfu_World_Console.Scripts
 
         public BodyPartEnum SymmetryPart;
 
+        public bool CanPenetrate;
+
+        public int PenetrateResist;
+
     }
 }

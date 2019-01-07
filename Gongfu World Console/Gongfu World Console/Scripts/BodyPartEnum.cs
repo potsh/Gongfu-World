@@ -19,6 +19,7 @@ namespace Gongfu_World_Console.Scripts
         RightKidney,
         Liver,
         Stomach,
+        Intestines,
         Neck,
         Private,
         Head,

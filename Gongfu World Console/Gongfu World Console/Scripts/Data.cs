@@ -26,6 +26,10 @@ namespace Gongfu_World_Console.Scripts
             {
                 return false;
             }
+            foreach (var gongfa in GongfaDefData.Values)
+            {
+                gongfa.PostLoadData();
+            }
 
             BodyPartDefData = (Dictionary<object, BodyPartDef>)CsvUtil<BodyPartDef>.LoadObjectsToDict<BodyPartDef>(Find.DataCsvPath + "BodyPartDef.csv");
             if (BodyPartDefData == null)
@@ -35,7 +39,7 @@ namespace Gongfu_World_Console.Scripts
             LinkAllBodyPartDefs();
             CalcCoverageRecursively(BodyPartDefData[BodyPartEnum.Body]);
             CalcCoverageAbsRecursively(BodyPartDefData[BodyPartEnum.Body]);
-            Body.BodyAreaInit();
+            
 
             CharacterTableData = (Dictionary<object, CharacterData>)CsvUtil<CharacterData>.LoadObjectsToDict<CharacterData>(Find.DataCsvPath + "CharacterData.csv");
             if (CharacterTableData == null)
