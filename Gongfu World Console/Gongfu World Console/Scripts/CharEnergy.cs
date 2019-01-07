@@ -35,6 +35,7 @@ public class CharEnergy
     public int DexterityAddCost => CalcEnergyCost(DexterityAdd);
     public int DexterityAdd => CalcStatAdd(MaxEnergy / 4);
 
+
     //通过消耗的内力计算基础属性加点数
     private int CalcStatAdd(int e)
     {

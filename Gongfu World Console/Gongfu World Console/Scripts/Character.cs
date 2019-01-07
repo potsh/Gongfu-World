@@ -65,23 +65,4 @@ public class Character
         Health.PostLoadData();
     }
 
-
-    public void TakeDamage(DamageInfo dInfo)
-    {
-        switch (dInfo.DmgType)
-        {
-            case DamageType.Pierce:
-
-                break;
-            case DamageType.Cut:
-                break;
-            case DamageType.Blunt:
-                break;
-            case DamageType.Energy:
-                break;
-            default:
-                break;
-        }
-    }
-
 }
