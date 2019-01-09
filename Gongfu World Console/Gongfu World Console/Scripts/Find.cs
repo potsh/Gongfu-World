@@ -13,10 +13,14 @@ namespace Gongfu_World_Console.Scripts
 
         public static string RootPath = "../../../../Assets/";
 
+        public static string LogPath => RootPath + "Log/";
+
         public static string DataPath => RootPath + "Data/";
 
         public static string DataExcelPath => DataPath + "excel/";
 
         public static string DataCsvPath => DataPath + "csv/";
+
+        public const double FloatPrecision = 1e-6;
     }
 }

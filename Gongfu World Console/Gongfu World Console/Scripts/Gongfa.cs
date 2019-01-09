@@ -26,14 +26,19 @@ namespace Gongfu_World_Console
 
         public float Efficiency => Math.Min(LearnProgress * GongfaDef.CalcEfficiency(Ch), GongfaDef.MaxEfficiency);
 
-        public float PhyDamage => GongfaDef.BasePhyDamage * Efficiency;
+        public int PowerTotal => Power + Ch.PrimaryAttr.Strength;
+        public float DmgMultiplier => 1 + PowerTotal / 100.0f;
 
-        public float EngDamage => GongfaDef.BaseEngDamage * Efficiency;
+        public int PierceDamage => (int)(GongfaDef.BasePierceDamage * Efficiency * DmgMultiplier);
+        public int CutDamage => (int)(GongfaDef.BaseCutDamage * Efficiency * DmgMultiplier);
+        public int BluntDamage => (int)(GongfaDef.BaseBluntDamage * Efficiency * DmgMultiplier);
+        public int EngDamage => (int)(GongfaDef.BaseEngDamage * Efficiency * DmgMultiplier);
 
-        public float Power => GongfaDef.BasePower* Efficiency;
+        public int Pierce => (int)(GongfaDef.Pierce * Efficiency * DmgMultiplier);
+        public float Ignore => GongfaDef.Ignore;
 
-        public float Speed => GongfaDef.BaseSpeed * Efficiency;
-
-        public float Clever => GongfaDef.BaseClever * Efficiency;
+        public int Power => (int)(GongfaDef.BasePower * Efficiency);
+        public int Speed => (int)(GongfaDef.BaseSpeed * Efficiency);
+        public int Clever => (int)(GongfaDef.BaseClever * Efficiency);
     }
 }

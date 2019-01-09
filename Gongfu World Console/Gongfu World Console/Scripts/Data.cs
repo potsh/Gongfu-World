@@ -10,6 +10,7 @@ namespace Gongfu_World_Console.Scripts
 {
     public static class Data
     {
+        private static bool _dataLoaded = false;
 
         public static Dictionary<object, GongfaDef> GongfaDefData;
 
@@ -21,6 +22,11 @@ namespace Gongfu_World_Console.Scripts
 
         public static bool LoadData()
         {
+            if (_dataLoaded)
+            {
+                return true;
+            }
+
             GongfaDefData = (Dictionary<object, GongfaDef>) CsvUtil<GongfaDef>.LoadObjectsToDict<GongfaDef>(Find.DataCsvPath + "GongfaDef.csv");
             if (GongfaDefData == null)
             {
@@ -46,6 +52,8 @@ namespace Gongfu_World_Console.Scripts
             {
                 return false;
             }
+
+            _dataLoaded = true;
 
             return true;
         }

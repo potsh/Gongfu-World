@@ -13,6 +13,7 @@ namespace Gongfu_World_Console.Scripts
         Undefined,
         Pierce,
         Cut,
+//        Sharp,
         Blunt,
         Energy,
     }

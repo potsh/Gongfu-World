@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -26,15 +27,18 @@ namespace Gongfu_World_Console
 
 
             //Console.WriteLine(typeof(Dictionary<GongfaTypeEnum, int>));
-
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
             Console.WriteLine("Total csv file converted from excel: {0}", ExcelConvert.AllExcelToCsv());
             Console.WriteLine("Data loaded successfully: {0}", Data.LoadData());
             Console.WriteLine("All csv file imported correctly: {0}", Data.CheckData());
 
-            Character ch = new Character(Data.CharacterTableData.First().Value);
+            CharacterData ch1 = Data.CharacterTableData.Values.ToArray()[0];
+            CharacterData ch2 = Data.CharacterTableData.Values.ToArray()[1];
 
 
+            DebugTool.Debug_DeathMatch_Statistics(ch1, ch2, 10000);
 
 
             //List<GongfaDef> gongfaDefList = CsvUtil<GongfaDef>.LoadObjects<GongfaDef>(gongfaDefPath);
@@ -56,24 +60,30 @@ namespace Gongfu_World_Console
             //            }
 
 
-            
-            JsonSerializerSettings jsSeting =  new JsonSerializerSettings
-                {
-                NullValueHandling = NullValueHandling.Ignore, TypeNameHandling = TypeNameHandling.None,
-                DefaultValueHandling = DefaultValueHandling.Ignore               
-            };
-            //string jsonData = JsonConvert.SerializeObject(gongfaDict, Formatting.Indented, jsSeting);
-            string jsonData = JsonConvert.SerializeObject(ch, Formatting.Indented, jsSeting);
-            Console.WriteLine(jsonData);
+
+            //            JsonSerializerSettings jsSeting =  new JsonSerializerSettings
+            //                {
+            //                NullValueHandling = NullValueHandling.Ignore, TypeNameHandling = TypeNameHandling.None,
+            //                DefaultValueHandling = DefaultValueHandling.Ignore               
+            //            };
+            //            string jsonData = JsonConvert.SerializeObject(ch1, Formatting.Indented, jsSeting);
+            //            Console.WriteLine(jsonData);
+            //
+            //            Console.WriteLine("############################################################################");
+            //            jsonData = JsonConvert.SerializeObject(ch2, Formatting.Indented, jsSeting);
+            //            Console.WriteLine(jsonData);
 
             //File.WriteAllText(dataPath + ch.Name + ".json", jsonData);
 
             Console.WriteLine();
 
 
-//            Character ch2 = JsonConvert.DeserializeObject<Character>(jsonData);
-//            string jsonData2 = JsonConvert.SerializeObject(ch, Formatting.Indented);
-//            Console.WriteLine(jsonData2);
+            stopwatch.Stop();
+            Console.WriteLine($"\n\nTotal time elapsed: {stopwatch.Elapsed.TotalMilliseconds / 1000.0}");
+
+            //            Character ch2 = JsonConvert.DeserializeObject<Character>(jsonData);
+            //            string jsonData2 = JsonConvert.SerializeObject(ch, Formatting.Indented);
+            //            Console.WriteLine(jsonData2);
 
             Console.ReadLine();
         }

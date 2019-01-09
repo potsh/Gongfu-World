@@ -48,12 +48,23 @@ public class CharEnergy
         return (1 + stat) * stat / 2;
     }
 
+    public void Init()
+    {
+        ProtectEnergy = MaxProtectEnergy;
+        FlowingEnergy = MaxFlowingEnergy;
+    }
+
     public CharEnergy()
     {
     }
     public CharEnergy(Character ch)
     {
         Ch = ch;
+    }
+
+    public void PostLoadData()
+    {
+        Init();
     }
 }
 

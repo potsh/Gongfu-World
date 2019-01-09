@@ -23,5 +23,30 @@ namespace Gongfu_World_Console.Scripts
 
         public Dictionary<BodyPartEnum, float> TgtPartMultiplier;
 
+        public bool PenetrateOut = false;
+
+        public DamageInfo(DamageInfo dInfo)
+        {
+            DmgType = dInfo.DmgType;
+            DmgAmount = dInfo.DmgAmount;
+            Pierce = dInfo.Pierce;
+            Ignore = dInfo.Ignore;
+
+            TgtAreaWeight = dInfo.TgtAreaWeight;
+            TgtGroupWeight = dInfo.TgtGroupWeight;
+            TgtPartMultiplier = dInfo.TgtPartMultiplier;
+        }
+
+        public DamageInfo(Gongfa gf, int dmgAmount, DamageType dmgType)
+        {
+            DmgType = dmgType;
+            DmgAmount = dmgAmount;
+            Pierce = gf.Pierce;
+            Ignore = gf.Ignore;
+
+            TgtAreaWeight = gf.GongfaDef.TgtAreaWeight;
+            TgtGroupWeight = gf.GongfaDef.TgtGroupWeight;
+            TgtPartMultiplier = gf.GongfaDef.TgtPartProbMultiDict;
+        }
     }
 }

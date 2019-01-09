@@ -15,7 +15,7 @@ public class CharHealth
 
     public int MaxHp => (int)(CharacterDef.BaseHp * HealthScale);
 
-    public int Hp;
+    public int Hp { get; set; }
 
     public bool Downed = false;
 
@@ -27,7 +27,9 @@ public class CharHealth
 
     public float HealthScale => 0.04f * Ch.PrimaryAttr.Constitution + 1;
 
-    public float EnergyProtectRate => (float) (Ch.Energy.ProtectEnergy) / MaxHp;
+    public float EnergyProtectRateVsHp => (float) (Ch.Energy.ProtectEnergy) / MaxHp;
+
+    public float EnergyProtectRate => (float)(Ch.Energy.ProtectEnergy) / (MaxHp + Ch.Energy.ProtectEnergy);
 
     public void Init(Character ch)
     {

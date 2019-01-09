@@ -63,6 +63,7 @@ namespace Gongfu_World_Console.Scripts
 
         public Dictionary<BodyPartEnum, BodyPart> AllBodyParts = new Dictionary<BodyPartEnum, BodyPart>();
 
+
         //Link parts and parents
         public void Init()
         {
@@ -86,8 +87,6 @@ namespace Gongfu_World_Console.Scripts
                 pair.Value.BodyPartDef = Data.BodyPartDefData[pair.Key];
                 pair.Value.PostLoadData();
             }
-
-            LinkAllParts();
         }
 
         private void LinkAllParts()

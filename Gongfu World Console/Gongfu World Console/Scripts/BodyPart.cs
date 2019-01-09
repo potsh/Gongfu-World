@@ -14,7 +14,7 @@ namespace Gongfu_World_Console.Scripts
 
         public int MaxHp => (int)(BodyPartDef.MaxHp * HealthScale);
 
-        public int Hp;
+        public int Hp { get; set; }
 
         public float PartHealthScale;
 
@@ -26,9 +26,15 @@ namespace Gongfu_World_Console.Scripts
         [JsonIgnore]
         public List<BodyPart> Children = new List<BodyPart>();
 
-        public bool IsDestroyed => Hp == 0;
+        public bool IsDestroyed => Hp <= 0;
 
-        public int PenetrateResist => (int)(BodyPartDef.PenetrateResist * HealthScale);
+        public int PenetrateResistHp => (int)(BodyPartDef.PenetrateResist * HealthScale);
+
+        public int PenetrateResistEnergy => (int)(PenetrateResistHp * Body.Ch.Health.EnergyProtectRateVsHp);
+
+        public int PenetrateResistTotal => PenetrateResistHp + PenetrateResistEnergy;
+
+        public float EnergyProtectRate => Body.Ch.Health.EnergyProtectRate;
 
         public BodyPart(BodyPartEnum partType, Body body)
         {
@@ -39,10 +45,7 @@ namespace Gongfu_World_Console.Scripts
 
         private void Init()
         {
-            if (Hp == default(int))
-            {
-                Hp = MaxHp;
-            }
+            Hp = MaxHp;
         }
 
         public void PostLoadData()
@@ -50,7 +53,17 @@ namespace Gongfu_World_Console.Scripts
             Init();
         }
 
-
+        public float GetDmgMultiplierByType(DamageType dmgType)
+        {
+            if (dmgType == DamageType.Pierce || dmgType == DamageType.Cut)
+            {
+                return BodyPartDef.SharpDmgMulti;
+            }
+            else
+            {
+                return BodyPartDef.NonSharpDmgMulti;
+            }
+        }
 
     }
 }

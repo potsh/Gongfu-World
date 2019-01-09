@@ -15,6 +15,7 @@ namespace Gongfu_World_Console.Scripts
         绝技,
         拳掌,
         腿法,
+        剑法,
     }
 
     public class GongfaDef : ILoadFromLine
@@ -34,12 +35,17 @@ namespace Gongfu_World_Console.Scripts
 
         public float MaxEfficiency;
 
-        public float BasePhyDamage;
-        public float BaseEngDamage;
+        public int BasePierceDamage;
+        public int BaseCutDamage;
+        public int BaseBluntDamage;
+        public int BaseEngDamage;
 
-        public float BasePower;
-        public float BaseSpeed;
-        public float BaseClever;
+        public int Pierce;
+        public float Ignore;
+
+        public int BasePower;
+        public int BaseSpeed;
+        public int BaseClever;
 
         public float TgtArea_Up;
         public float TgtArea_Middle;

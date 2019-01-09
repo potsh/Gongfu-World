@@ -42,7 +42,9 @@ namespace Gongfu_World_Console.Scripts
 
         public int MaxHp;
 
-        public float DamageMulti;
+        public float SharpDmgMulti;
+
+        public float NonSharpDmgMulti;
 
         public float PainPerHp;
 
@@ -57,6 +59,8 @@ namespace Gongfu_World_Console.Scripts
         public BodyPartEnum SymmetryPart;
 
         public bool CanPenetrate;
+
+        public float DirectPierceProb;
 
         public int PenetrateResist;
 

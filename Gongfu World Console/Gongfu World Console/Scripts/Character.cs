@@ -18,7 +18,7 @@ public class Character
 
     public Dictionary<GongfaTypeEnum, int> AptitudeDict; //资质
 
-
+    public bool IsAlive => !Health.Dead;
 
     private void Init(string name)
     {
@@ -52,6 +52,7 @@ public class Character
         AptitudeDict.Add(GongfaTypeEnum.绝技, cd.绝技);
         AptitudeDict.Add(GongfaTypeEnum.拳掌, cd.拳掌);
         AptitudeDict.Add(GongfaTypeEnum.腿法, cd.腿法);
+        AptitudeDict.Add(GongfaTypeEnum.剑法, cd.剑法);
 
         PrimaryAttr.BornStrength = cd.Strength;
         PrimaryAttr.BornDexterity = cd.Dexterity;
@@ -63,6 +64,7 @@ public class Character
         Gongfa.LoadGongfaFromData(cd);
 
         Health.PostLoadData();
+        Energy.PostLoadData();
     }
 
 }
