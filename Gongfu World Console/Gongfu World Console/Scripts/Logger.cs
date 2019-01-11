@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 //from https://www.cnblogs.com/yangsirc/p/8295129.html
 
@@ -9,13 +10,15 @@ namespace Gongfu_World_Console.Scripts
 
     public enum LogType
     {
+        Undefined,
         All,
-        Information,
+        Info,
         Debug,
         Success,
         Failure,
         Warning,
-        Error
+        Error,
+        Csv
     }
 
 
@@ -27,10 +30,19 @@ namespace Gongfu_World_Console.Scripts
 
             private readonly string _logFileName;
 
-            public LoggerInstance(string fileName)
+            private LogType _logType = LogType.Info;
+
+            public LogType LogType { get => _logType; set => _logType = value; }
+
+            public LoggerInstance(string fileName, bool isOverWrite = false)
             {
                 _logFileName = fileName;
                 _logLock = new object();
+                if (isOverWrite && File.Exists(_logFileName))
+                {
+                    FileStream fs = new FileStream(_logFileName, FileMode.Truncate, FileAccess.Write);
+                    fs.Close();               
+                }
             }
 
 
@@ -39,13 +51,28 @@ namespace Gongfu_World_Console.Scripts
             /// </summary>
             /// <param name="logContent">Log content</param>
             /// <param name="logType">Log type</param>
-            public void WriteLog(string logContent, LogType logType = LogType.Information)
+            public void WriteLog(string logContent, LogType logType = LogType.Undefined)
             {
                 try
                 {
-                    string[] logText = new string[] { DateTime.Now.ToString("hh:mm:ss") + ": " + logType.ToString() + ": " + logContent };
+                    string[] logText;
 
-                    File.AppendAllLines(_logFileName, logText);
+                    if (logType == LogType.Undefined)
+                    {
+                        logType = LogType;
+                    }
+
+                    if (logType != LogType.Csv)
+                    {
+                        logText = new string[] { DateTime.Now.ToString("hh:mm:ss") + ": " + logType + ": " + logContent };
+                    }
+                    else
+                    {
+                        logText = new string[] { logContent };
+                    }
+
+
+                    File.AppendAllLines(_logFileName, logText, Encoding.Default);
 
                 }
                 catch (Exception)
@@ -127,6 +154,8 @@ namespace Gongfu_World_Console.Scripts
 
         private static LoggerInstance _debug;
 
+        private static LoggerInstance _csv;
+
         private Logger() { }
 
         /// <summary>
@@ -157,6 +186,23 @@ namespace Gongfu_World_Console.Scripts
                     _debug = new LoggerInstance(Find.LogPath + "Debug.log");
                 }
                 return _debug;
+            }
+        }
+
+        /// <summary>
+        /// Logger Csv instance
+        /// </summary>
+        public static LoggerInstance Csv
+        {
+            get
+            {
+                if (_csv == null)
+                {
+                    //logFileName = Guid.NewGuid() + ".log";
+                    _csv = new LoggerInstance(Find.LogPath + "Debug.csv", isOverWrite: true);
+                    _csv.LogType = LogType.Csv;
+                }
+                return _csv;
             }
         }
 

@@ -20,6 +20,7 @@ namespace Gongfu_World_Console
         public int 拳掌;
         public int 腿法;
         public int 剑法;
+        public int 刀法;
 
         public int Strength;
         public int Dexterity;
@@ -34,6 +35,9 @@ namespace Gongfu_World_Console
         public Dictionary<string, int> Learned拳掌;
         public Dictionary<string, int> Learned腿法;
         public Dictionary<string, int> Learned剑法;
+        public Dictionary<string, int> Learned刀法;
+
+        public int Armor;
 
 
     }

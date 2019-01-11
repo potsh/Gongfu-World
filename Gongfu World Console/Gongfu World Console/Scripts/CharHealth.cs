@@ -43,10 +43,7 @@ public class CharHealth
     public void PostLoadData()
     {
         Body.Ch = Ch;
-        if (Hp == default(int))
-        {
-            Hp = MaxHp;
-        }
+        Hp = MaxHp;
         Body.PostLoadData();
     }
 

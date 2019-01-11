@@ -36,9 +36,14 @@ namespace Gongfu_World_Console
 
             CharacterData ch1 = Data.CharacterTableData.Values.ToArray()[0];
             CharacterData ch2 = Data.CharacterTableData.Values.ToArray()[1];
+            CharacterData ch3 = Data.CharacterTableData.Values.ToArray()[0];
+            CharacterData ch4 = Data.CharacterTableData.Values.ToArray()[1];
 
+            //DebugTool.Debug_DeathMatch_Statistics(ch1, ch2, 1000, true);
 
-            DebugTool.Debug_DeathMatch_Statistics(ch1, ch2, 10000);
+            DebugTool.Debug_ArmorTest_Statistics(ch1, ch2, 0, 60, 1000);
+
+            //DebugTool.Debug_ArmorTest_Once(ch1, ch2, 48, 1, true);
 
 
             //List<GongfaDef> gongfaDefList = CsvUtil<GongfaDef>.LoadObjects<GongfaDef>(gongfaDefPath);

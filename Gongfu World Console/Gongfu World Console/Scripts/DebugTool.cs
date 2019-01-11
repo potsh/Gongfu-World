@@ -6,11 +6,24 @@ using System.Threading.Tasks;
 
 namespace Gongfu_World_Console.Scripts
 {
+    public struct DamageDebug
+    {
+        public bool IsDebugCsvInit;
+
+        public string DInfoString;
+
+        public int DInfoCount;
+
+        public int AttackCount;
+    }
+
     public static class DebugTool
     {
         public static int PenetrateOutCount = 0;
 
-        public static bool PenetrateOutDetect = true;
+        public static int OverkillCount = 0;
+
+        public static DamageDebug DmgDebug = new DamageDebug();
 
         public static DamageWorker DmgWorker = new DamageWorker();
 
@@ -45,6 +58,11 @@ namespace Gongfu_World_Console.Scripts
                 gfList.AddRange(gfDict[GongfaTypeEnum.剑法].Values.ToList());
             }
 
+            if (gfDict.ContainsKey(GongfaTypeEnum.刀法))
+            {
+                gfList.AddRange(gfDict[GongfaTypeEnum.刀法].Values.ToList());
+            }
+
             //            int randValue = Utility.Rand.Next(0, gfList.Count);
             //
             //            return gfList[randValue];
@@ -58,6 +76,7 @@ namespace Gongfu_World_Console.Scripts
             int turnCount = 0;
             while (ch1.IsAlive && ch2.IsAlive)
             {
+                DebugTool.DmgDebug.AttackCount++;
                 if (turn)
                 {
                     DmgWorker.GongfaAttack(Debug_RandGongfa(ch1), ch2);
@@ -74,8 +93,7 @@ namespace Gongfu_World_Console.Scripts
             return turnCount;
         }
 
-
-        public static void Debug_DeathMatch_Statistics(CharacterData ch1d, CharacterData ch2d, int round)
+        public static int Debug_DeathMatch_Statistics(CharacterData ch1d, CharacterData ch2d, int round, bool outPut = true)
         {
             bool sente = true;
             int win = 0;
@@ -119,11 +137,41 @@ namespace Gongfu_World_Console.Scripts
                 sente = !sente;
             }
 
-            Console.WriteLine($"\nPenetrateOutCount = {DebugTool.PenetrateOutCount}");
-            Console.WriteLine($"\n{ch1d.Name} Vs {ch2d.Name}");
-            Console.WriteLine($"Average Turn Num = {(double)turnTotal / round:0.00}");
-            Console.WriteLine($"Win Rate：{ch1d.Name} = {(double)win / round:0.000%}, {ch2d.Name} = {1 - (double)win / round:0.000%}");
-            Console.WriteLine($"Remain Hp Rate：{ch1d.Name} = {((double)remainHpTotal1 / (win * hp1)):0.000%}, {ch2d.Name} = {((double)remainHpTotal2 / ((round - win) * hp2)):0.000%}");
+            if (outPut)
+            {
+                Console.WriteLine($"\nPenetrateOutCount = {DebugTool.PenetrateOutCount}");
+                Console.WriteLine($"\n{ch1d.Name} Vs {ch2d.Name}");
+                Console.WriteLine($"Average Turn Num = {(double)turnTotal / round:0.00}");
+                Console.WriteLine($"Win Rate：{ch1d.Name} = {(double)win / round:0.000%}, {ch2d.Name} = {1 - (double)win / round:0.000%}");
+                Console.WriteLine($"Remain Hp Rate：{ch1d.Name} = {((double)remainHpTotal1 / (win * hp1)):0.000%}, {ch2d.Name} = {((double)remainHpTotal2 / ((round - win) * hp2)):0.000%}");
+            }
+
+            return win;
         }
+
+
+        public static int Debug_ArmorTest_Once(CharacterData ch1d, CharacterData ch2d, int armor, int round, bool outPut)
+        {            
+            ch1d.Armor = ch2d.Armor = armor;
+            return Debug_DeathMatch_Statistics(ch1d, ch2d, round, outPut);
+        }
+
+        public static void Debug_ArmorTest_Statistics(CharacterData ch1d, CharacterData ch2d, int armorMin, int armonMax, int round)
+        {
+            Logger.Csv.WriteLog($"Armor,{ch1d.Name},{ch2d.Name}");
+            for (int i = armorMin; i <= armonMax; i++)
+            {
+                int win = Debug_ArmorTest_Once(ch1d, ch2d, i, round, false);
+                Console.WriteLine(i);
+                Logger.Csv.WriteLog($"{i},{win * 1.0 / round:0.000%},{(round - win) * 1.0 / round:0.000%}");
+            }
+        }
+
+
+
+
+
+
+
     }
 }

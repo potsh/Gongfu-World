@@ -9,7 +9,11 @@ namespace Gongfu_World_Console.Scripts
 
     public class DamageInfo
     {
+        public Character Attacker;
+
         public DamageType DmgType;
+
+        public Gongfa Gongfa;
 
         public int DmgAmount;
 
@@ -27,6 +31,7 @@ namespace Gongfu_World_Console.Scripts
 
         public DamageInfo(DamageInfo dInfo)
         {
+            Attacker = dInfo.Attacker;
             DmgType = dInfo.DmgType;
             DmgAmount = dInfo.DmgAmount;
             Pierce = dInfo.Pierce;
@@ -39,6 +44,7 @@ namespace Gongfu_World_Console.Scripts
 
         public DamageInfo(Gongfa gf, int dmgAmount, DamageType dmgType)
         {
+            Attacker = gf.Ch;
             DmgType = dmgType;
             DmgAmount = dmgAmount;
             Pierce = gf.Pierce;

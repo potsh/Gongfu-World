@@ -16,6 +16,7 @@ namespace Gongfu_World_Console.Scripts
         拳掌,
         腿法,
         剑法,
+        刀法,
     }
 
     public class GongfaDef : ILoadFromLine

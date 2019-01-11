@@ -1,4 +1,8 @@
-﻿using System;
+﻿//#define DMG_DEBUG
+#define PenetrateDebug
+#define OverkillDebug
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +13,8 @@ namespace Gongfu_World_Console.Scripts
 
     public class DamageResult
     {
+        public BodyPart Part;
+
         //public BodyPart HitPart;
         public DamageType DmgType;
 
@@ -27,6 +33,10 @@ namespace Gongfu_World_Console.Scripts
         public int DmgDealtHpActually => DmgDealtHp - OverkillHp;
 
         public int DmgDealtEnergyActually => DmgDealtEnergy;
+
+        public int DmgToHealth;
+
+        public int DmgToEnergy;
     }
 
     public class DamageWorker
@@ -151,11 +161,6 @@ namespace Gongfu_World_Console.Scripts
                 randValue -= pair.Value;
             }
 
-            if (result.Equals(default(TKey))) //Debug
-            {
-                ;
-            }
-
             return result;
         }
 
@@ -174,65 +179,73 @@ namespace Gongfu_World_Console.Scripts
             }
         }
 
+
+        public bool PenetrateArmorSharp(DamageInfo dInfo)
+        {
+            CharDefense defense = dInfo.Gongfa.Ch.Defense;
+            if (dInfo.Pierce > defense.Armor)
+            {
+                dInfo.Pierce -= defense.Armor;
+            }
+            else
+            {
+                dInfo.Pierce = 0;
+                dInfo.DmgAmount = Math.Max(dInfo.Pierce + dInfo.DmgAmount - defense.Armor, 0);
+            }
+
+            return dInfo.DmgAmount > 0;
+        }
+
+        public bool PenetrateArmorIgnore(DamageInfo dInfo)
+        {
+            CharDefense defense = dInfo.Gongfa.Ch.Defense;
+            int remainArmor = (int)(defense.Armor * (1 - dInfo.Ignore));
+
+            dInfo.DmgAmount = Math.Max(dInfo.DmgAmount - remainArmor, 0);
+
+            return dInfo.DmgAmount > 0;
+
+        }
+
         private delegate DamageResult CalcPenetrateResult(DamageInfo dInfo, BodyPart part);
+        private delegate bool PenetrateArmor(DamageInfo dInfo);
 
         public void TakeDamage(DamageInfo dInfo, BodyPart part)
         {
             CalcPenetrateResult calcPenetrateResult;
+            PenetrateArmor penetrateArmor;
             switch (dInfo.DmgType)
             {
                 case DamageType.Pierce:
                 case DamageType.Cut:
                     calcPenetrateResult = new CalcPenetrateResult(CalcSharpResult);
+                    penetrateArmor = new PenetrateArmor(PenetrateArmorSharp);
                     break;
                 case DamageType.Blunt:
                     calcPenetrateResult = new CalcPenetrateResult(CalcIgnoreResult);
+                    penetrateArmor = new PenetrateArmor(PenetrateArmorIgnore);
                     break;
                 case DamageType.Energy:
                     calcPenetrateResult = new CalcPenetrateResult(CalcIgnoreResult);
+                    penetrateArmor = new PenetrateArmor(PenetrateArmorIgnore);
                     break;
                 default:
                     calcPenetrateResult = new CalcPenetrateResult(CalcSharpResult);
+                    penetrateArmor = new PenetrateArmor(PenetrateArmorSharp);
                     break;
             }
 
-            ApplyDamageRecursively(dInfo, part, calcPenetrateResult);
-        }
-
-        //进行部位伤害结算，并且判断是否伤害溢出
-        private void ApplyDamage(DamageResult dmgRes, BodyPart part)
-        {
-            Character ch = part.Body.Ch;
-
-            if (dmgRes.DmgDealtHp >= part.Hp) //伤害溢出
+#if DMG_DEBUG
+            if (!DebugTool.DmgDebug.IsDebugCsvInit)
             {
-                if (part.BodyPartDef.NotDestroyable)
-                {
-                    dmgRes.OverkillHp = dmgRes.DmgDealtHp - part.Hp + 1;
-                    part.Hp = 1;
-                }
-                else
-                {
-                    dmgRes.OverkillHp = dmgRes.DmgDealtHp - part.Hp;
-                    part.Hp = 0;
-                }                    
+                Logger.Csv.WriteLog($"AttackCount,DInfoCount,Victim,Attacker,Gongfa,DmgType,DmgAmount,Pierce,Ignore,HitPart,DmgDealt,DmgDealtHp,DmgDealtEnergy,IsPenetrated,OverkillHp,DmgDealtHpActually,DmgToHealth,DmgToEnergy,PartHp,PartPR,Hp,Energy", LogType.Csv);
+                DebugTool.DmgDebug.IsDebugCsvInit = true;
             }
-            else
-            {
-                part.Hp -= dmgRes.DmgDealtHp;
-            }
-
-            float dmgTypeMultiplier = part.GetDmgMultiplierByType(dmgRes.DmgType);
-            ch.Health.Hp -= (int)(dmgRes.DmgDealtHpActually * dmgTypeMultiplier);
-
-            ch.Energy.ProtectEnergy -= (int)(dmgRes.DmgDealtEnergy * dmgTypeMultiplier);
-
-#if false
-            if (ch.Name == "流氓")
-            {
-                Logger.Debug.WriteLog($"CurrentEnergy = {ch.Energy.ProtectEnergy}, -{(int)(dmgRes.DmgDealtEnergy * dmgTypeMultiplier)}", LogType.Debug);
-            }
+            DebugTool.DmgDebug.DInfoString = $"{DebugTool.DmgDebug.AttackCount},{DebugTool.DmgDebug.DInfoCount},{part.Body.Ch.Name},{dInfo.Attacker.Name},{dInfo.Gongfa.GongfaDef.Name},{dInfo.DmgType},{dInfo.DmgAmount},{dInfo.Pierce},{dInfo.Ignore},";
 #endif
+            penetrateArmor(dInfo);
+            ApplyDamageRecursively(dInfo, part, calcPenetrateResult);
+
         }
 
 
@@ -262,8 +275,10 @@ namespace Gongfu_World_Console.Scripts
 
                     if (dmgResult.OverkillHp > 0)
                     {
-                        DamageInfo overkillDmgInfo = new DamageInfo(dInfo);
-                        overkillDmgInfo.DmgAmount = dmgResult.OverkillHp;
+                        DamageInfo overkillDmgInfo = new DamageInfo(dInfo)
+                        {
+                            DmgAmount = dmgResult.OverkillHp
+                        };
                         ApplyDamageRecursively(dInfo, curPart.Parent, calcPenetrateResult);
                     }
                 }
@@ -286,22 +301,78 @@ namespace Gongfu_World_Console.Scripts
                         curPart = curPart.Parent; //如果伤害向外穿，则返还伤害到上一层身体组件
                         if (curPart.BodyPartDef.Name == BodyPartEnum.Body) //若伤害穿出身体，结束
                         {
-#if TRACE
+#if PenetrateDebug
                             DebugTool.PenetrateOutCount++;
 #endif
                             break;
                         }
                     }
+
+#if DMG_DEBUG
+                    //记录穿透伤害的dInfo
+                    DebugTool.DmgDebug.DInfoString = $"{DebugTool.DmgDebug.AttackCount},{DebugTool.DmgDebug.DInfoCount},{curPart.Body.Ch.Name},{dInfo.Attacker.Name},{dInfo.Gongfa.GongfaDef.Name},{dInfo.DmgType},{dInfo.DmgAmount},{dInfo.Pierce},{dInfo.Ignore},";
+#endif
                 }
-                
+
             }
         }
+
+        //进行部位伤害结算，并且判断是否伤害溢出
+        private void ApplyDamage(DamageResult dmgRes, BodyPart part)
+        {
+            Character ch = part.Body.Ch;
+
+            if (dmgRes.DmgDealtHp >= part.Hp) //伤害溢出
+            {
+#if OverkillDebug
+                DebugTool.OverkillCount++;
+#endif
+                if (part.BodyPartDef.NotDestroyable)
+                {
+                    dmgRes.OverkillHp = dmgRes.DmgDealtHp - part.Hp + 1;
+                    part.Hp = 1;
+                }
+                else
+                {
+                    dmgRes.OverkillHp = dmgRes.DmgDealtHp - part.Hp;
+                    part.Hp = 0;
+                }
+            }
+            else
+            {
+                part.Hp -= dmgRes.DmgDealtHp;
+            }
+
+            float dmgTypeMultiplier = part.GetDmgMultiplierByType(dmgRes.DmgType);
+
+            dmgRes.DmgToHealth = (int)(dmgRes.DmgDealtHpActually * dmgTypeMultiplier);
+            dmgRes.DmgToEnergy = (int)(dmgRes.DmgDealtEnergy * dmgTypeMultiplier);
+
+#if DMG_DEBUG
+            int partPenetrateResist = dmgRes.Part.PenetrateResistTotal;
+#endif
+
+            ch.Health.Hp -= dmgRes.DmgToHealth;
+            ch.Energy.ProtectEnergy -= dmgRes.DmgToEnergy;
+
+#if DMG_DEBUG
+            //HitPart,DmgDealt,DmgDealtHp,DmgDealtEnergy,IsPenetrated,OverkillHp,DmgDealtHpActually,DmgToHealth,DmgToEnergy
+            string dmgResString =
+                $"{dmgRes.Part.BodyPartDef.Name},{dmgRes.DmgDealt},{dmgRes.DmgDealtHp},{dmgRes.DmgDealtEnergy},{dmgRes.IsPenetrated},{dmgRes.OverkillHp},{dmgRes.DmgDealtHpActually},{dmgRes.DmgToHealth},{dmgRes.DmgToEnergy},{dmgRes.Part.Hp},{partPenetrateResist},{dmgRes.Part.Body.Ch.Health.Hp},{dmgRes.Part.Body.Ch.Energy.ProtectEnergy}";
+            Logger.Csv.WriteLog(DebugTool.DmgDebug.DInfoString + dmgResString, LogType.Csv);
+#endif
+
+        }
+
 
         //刺伤、割伤
         //在不考虑部位是否摧毁的情况下，计算穿透伤害和对该部位造成的伤害
         public DamageResult CalcSharpResult(DamageInfo dInfo, BodyPart part)
         {
-            DamageResult dmgRes = new DamageResult();
+            DamageResult dmgRes = new DamageResult
+            {
+                Part = part
+            };
 
             if (part.BodyPartDef.CanPenetrate) //如果该部位允许能穿透
             {
@@ -361,7 +432,10 @@ namespace Gongfu_World_Console.Scripts
         //在不考虑部位是否摧毁的情况下，计算穿透伤害和对该部位造成的伤害
         public DamageResult CalcIgnoreResult(DamageInfo dInfo, BodyPart part)
         {
-            DamageResult dmgRes = new DamageResult();
+            DamageResult dmgRes = new DamageResult
+            {
+                Part = part
+            };
 
             if (part.BodyPartDef.CanPenetrate) //如果该部位允许穿透
             {
@@ -398,25 +472,41 @@ namespace Gongfu_World_Console.Scripts
 
             if (gf.PierceDamage != 0)
             {
-                DamageInfo dInfo = new DamageInfo(gf, gf.PierceDamage, DamageType.Pierce);
+                DamageInfo dInfo = new DamageInfo(gf, gf.PierceDamage, DamageType.Pierce)
+                {
+                    Attacker = gf.Ch,
+                    Gongfa = gf
+                };
                 dmgInfoList.Add(dInfo);
             }
 
             if (gf.CutDamage != 0)
             {
-                DamageInfo dInfo = new DamageInfo(gf, gf.CutDamage, DamageType.Cut);
+                DamageInfo dInfo = new DamageInfo(gf, gf.CutDamage, DamageType.Cut)
+                {
+                    Attacker = gf.Ch,
+                    Gongfa = gf
+                };
                 dmgInfoList.Add(dInfo);
             }
 
             if (gf.BluntDamage != 0)
             {
-                DamageInfo dInfo = new DamageInfo(gf, gf.BluntDamage, DamageType.Blunt);
+                DamageInfo dInfo = new DamageInfo(gf, gf.BluntDamage, DamageType.Blunt)
+                {
+                    Attacker = gf.Ch,
+                    Gongfa = gf
+                };
                 dmgInfoList.Add(dInfo);
             }
 
             if (gf.EngDamage != 0)
             {
-                DamageInfo dInfo = new DamageInfo(gf, gf.EngDamage, DamageType.Energy);
+                DamageInfo dInfo = new DamageInfo(gf, gf.EngDamage, DamageType.Energy)
+                {
+                    Attacker = gf.Ch,
+                    Gongfa = gf
+                };
                 dmgInfoList.Add(dInfo);
             }
 
@@ -431,6 +521,7 @@ namespace Gongfu_World_Console.Scripts
             {
                 foreach (var dInfo in dmgList)
                 {
+                    DebugTool.DmgDebug.DInfoCount++;
                     TakeDamage(dInfo, victim);
                 }
             }
