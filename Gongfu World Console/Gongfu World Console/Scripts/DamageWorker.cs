@@ -1,6 +1,7 @@
-﻿//#define DMG_DEBUG
+﻿#define DMG_DEBUG
 #define PenetrateDebug
 #define OverkillDebug
+
 
 using System;
 using System.Collections.Generic;
@@ -152,7 +153,7 @@ namespace Gongfu_World_Console.Scripts
             TKey result = default(TKey);
             foreach (var pair in dict)
             {
-                if (randValue < pair.Value)
+                if (randValue - pair.Value < Find.FloatPrecision) //randValue <= pair.Value
                 {
                     result = pair.Key;
                     break;
@@ -189,8 +190,8 @@ namespace Gongfu_World_Console.Scripts
             }
             else
             {
-                dInfo.Pierce = 0;
                 dInfo.DmgAmount = Math.Max(dInfo.Pierce + dInfo.DmgAmount - defense.Armor, 0);
+                dInfo.Pierce = 0;
             }
 
             return dInfo.DmgAmount > 0;
@@ -214,7 +215,7 @@ namespace Gongfu_World_Console.Scripts
         {
             CalcPenetrateResult calcPenetrateResult;
             PenetrateArmor penetrateArmor;
-            switch (dInfo.DmgType)
+            switch (dInfo.DmgDef.DmgType)
             {
                 case DamageType.Pierce:
                 case DamageType.Cut:
@@ -238,10 +239,15 @@ namespace Gongfu_World_Console.Scripts
 #if DMG_DEBUG
             if (!DebugTool.DmgDebug.IsDebugCsvInit)
             {
-                Logger.Csv.WriteLog($"AttackCount,DInfoCount,Victim,Attacker,Gongfa,DmgType,DmgAmount,Pierce,Ignore,HitPart,DmgDealt,DmgDealtHp,DmgDealtEnergy,IsPenetrated,OverkillHp,DmgDealtHpActually,DmgToHealth,DmgToEnergy,PartHp,PartPR,Hp,Energy", LogType.Csv);
+                Logger.DmgCsv.WriteLog($"AttackCount,DInfoCount,Victim,Attacker,Gongfa,DmgType,DmgAmount,Pierce,Ignore,HitPart,DmgDealt,DmgDealtHp,DmgDealtEnergy,IsPenetrated,OverkillHp,DmgDealtHpActually,DmgToHealth,DmgToEnergy,PartHp,PartPR,Hp,Energy", LogType.Csv);
                 DebugTool.DmgDebug.IsDebugCsvInit = true;
             }
-            DebugTool.DmgDebug.DInfoString = $"{DebugTool.DmgDebug.AttackCount},{DebugTool.DmgDebug.DInfoCount},{part.Body.Ch.Name},{dInfo.Attacker.Name},{dInfo.Gongfa.GongfaDef.Name},{dInfo.DmgType},{dInfo.DmgAmount},{dInfo.Pierce},{dInfo.Ignore},";
+
+            if (DebugTool.DmgDebug.First)
+            {
+                DebugTool.DmgDebug.DInfoCount++;
+                DebugTool.DmgDebug.DInfoString = $"{DebugTool.DmgDebug.AttackCount},{DebugTool.DmgDebug.DInfoCount},{part.Body.Ch.Name},{dInfo.Attacker.Name},{dInfo.Gongfa.GongfaDef.Name},{dInfo.DmgDef.DmgType},{dInfo.DmgAmount},{dInfo.Pierce},{dInfo.Ignore},";
+            }
 #endif
             penetrateArmor(dInfo);
             ApplyDamageRecursively(dInfo, part, calcPenetrateResult);
@@ -257,7 +263,7 @@ namespace Gongfu_World_Console.Scripts
             while (dInfo.DmgAmount > 0)
             {
                 DamageResult dmgResult = calcPenetrateResult(dInfo, curPart);
-                dmgResult.DmgType = dInfo.DmgType;
+                dmgResult.DmgType = dInfo.DmgDef.DmgType;
                 if (dmgResult.DmgDealt != 0)
                 {
                     ApplyDamage(dmgResult, curPart);
@@ -267,7 +273,7 @@ namespace Gongfu_World_Console.Scripts
                         return;
                     }
 
-                    if (curPart.IsDestroyed && curPart.BodyPartDef.IsLethalAfterDestroyed)
+                    if (curPart.CauseDead)
                     {
                         ch.Health.Dead = true;
                         return;
@@ -288,18 +294,22 @@ namespace Gongfu_World_Console.Scripts
                     if (!dInfo.PenetrateOut)
                     {
                         BodyPartEnum hitPart = ChooseHitPart(dInfo, curPart, BodyPartDepthEnum.Inside);
-                        if (hitPart == curPart.BodyPartDef.Name) //如果伤害没有判定到内部器官，伤害穿透方向改为穿出，同时穿透减半
+                        if (hitPart == curPart.BodyPartDef.Name) //如果伤害没有判定到内部器官，伤害穿透方向改为穿出，并且不再具有穿透能力
                         {
                             dInfo.PenetrateOut = true;
-                            //dInfo.Pierce /= 2;
-                            //dInfo.Ignore /= 2;
                         }
                         curPart = curPart.Body.AllBodyParts[hitPart];
                     }
                     else
                     {
                         curPart = curPart.Parent; //如果伤害向外穿，则返还伤害到上一层身体组件
-                        if (curPart.BodyPartDef.Name == BodyPartEnum.Body) //若伤害穿出身体，结束
+                        if (curPart.BodyPartDef.Depth == BodyPartDepthEnum.Outside) //如果向外传出到了最暴露于外部的部位，为防止伤害再穿出身体而损失，剩余伤害全部对当前部位造成伤害
+                        {
+                            dInfo.Pierce = 0;
+                            dInfo.Ignore = 0;
+                        }
+
+                        if (curPart.BodyPartDef.Name == BodyPartEnum.Body || curPart.BodyPartDef.Name == BodyPartEnum.Torso) //若伤害穿出身体，结束
                         {
 #if PenetrateDebug
                             DebugTool.PenetrateOutCount++;
@@ -309,8 +319,12 @@ namespace Gongfu_World_Console.Scripts
                     }
 
 #if DMG_DEBUG
-                    //记录穿透伤害的dInfo
-                    DebugTool.DmgDebug.DInfoString = $"{DebugTool.DmgDebug.AttackCount},{DebugTool.DmgDebug.DInfoCount},{curPart.Body.Ch.Name},{dInfo.Attacker.Name},{dInfo.Gongfa.GongfaDef.Name},{dInfo.DmgType},{dInfo.DmgAmount},{dInfo.Pierce},{dInfo.Ignore},";
+                    if (DebugTool.DmgDebug.First)
+                    {
+                        //记录穿透伤害的dInfo
+                        DebugTool.DmgDebug.DInfoCount++;
+                        DebugTool.DmgDebug.DInfoString = $"{DebugTool.DmgDebug.AttackCount},{DebugTool.DmgDebug.DInfoCount},{curPart.Body.Ch.Name},{dInfo.Attacker.Name},{dInfo.Gongfa.GongfaDef.Name},{dInfo.DmgDef.DmgType},{dInfo.DmgAmount},{dInfo.Pierce},{dInfo.Ignore},";
+                    }
 #endif
                 }
 
@@ -356,10 +370,13 @@ namespace Gongfu_World_Console.Scripts
             ch.Energy.ProtectEnergy -= dmgRes.DmgToEnergy;
 
 #if DMG_DEBUG
-            //HitPart,DmgDealt,DmgDealtHp,DmgDealtEnergy,IsPenetrated,OverkillHp,DmgDealtHpActually,DmgToHealth,DmgToEnergy
-            string dmgResString =
-                $"{dmgRes.Part.BodyPartDef.Name},{dmgRes.DmgDealt},{dmgRes.DmgDealtHp},{dmgRes.DmgDealtEnergy},{dmgRes.IsPenetrated},{dmgRes.OverkillHp},{dmgRes.DmgDealtHpActually},{dmgRes.DmgToHealth},{dmgRes.DmgToEnergy},{dmgRes.Part.Hp},{partPenetrateResist},{dmgRes.Part.Body.Ch.Health.Hp},{dmgRes.Part.Body.Ch.Energy.ProtectEnergy}";
-            Logger.Csv.WriteLog(DebugTool.DmgDebug.DInfoString + dmgResString, LogType.Csv);
+            if (DebugTool.DmgDebug.First)
+            {
+                string dmgResString =
+                    $"{dmgRes.Part.BodyPartDef.Name},{dmgRes.DmgDealt},{dmgRes.DmgDealtHp},{dmgRes.DmgDealtEnergy},{dmgRes.IsPenetrated},{dmgRes.OverkillHp},{dmgRes.DmgDealtHpActually},{dmgRes.DmgToHealth},{dmgRes.DmgToEnergy},{dmgRes.Part.Hp},{partPenetrateResist},{dmgRes.Part.Body.Ch.Health.Hp},{dmgRes.Part.Body.Ch.Energy.ProtectEnergy}";
+                Logger.DmgCsv.WriteLog(DebugTool.DmgDebug.DInfoString + dmgResString, LogType.Csv);
+            }
+
 #endif
 
         }
@@ -374,13 +391,11 @@ namespace Gongfu_World_Console.Scripts
                 Part = part
             };
 
-            if (part.BodyPartDef.CanPenetrate) //如果该部位允许能穿透
+            if (part.BodyPartDef.CanPenetrate) //如果该部位允许穿透
             {
-                if (part.BodyPartDef.DirectPierceProb > 0 && dInfo.DmgType == DamageType.Pierce)
+                if (part.BodyPartDef.DirectPierceProb > Find.FloatPrecision && dInfo.DmgDef.DmgType == DamageType.Pierce)
                 {
                     double randValue = Utility.Rand.NextDouble(); 
-
-//                    Logger.Debug.WriteLog($"{randValue:0.000000}");
 
                     if (randValue < part.BodyPartDef.DirectPierceProb) //直接穿透，如从肋骨的缝隙中穿过去
                     {
@@ -389,12 +404,14 @@ namespace Gongfu_World_Console.Scripts
                     }
                 }
 
-                int remainPierce = dInfo.Pierce - part.PenetrateResistTotal;                
+                int penetrateResist = (int)(part.PenetrateResistTotal * dInfo.DmgDef.WoundSize); //伤口大小决定穿透的容易程度，伤口越大，越难穿透
+                int remainPierce = dInfo.Pierce - penetrateResist;                
+
 
                 if (remainPierce > 0) //完全穿透，仅仅靠Piece就穿透了
                 {
                     dmgRes.IsPenetrated = true;
-                    dmgRes.DmgDealt = Math.Min(dInfo.DmgAmount, part.PenetrateResistTotal); //对该部位造成的单次伤害，始终不会大于穿透阈值
+                    dmgRes.DmgDealt = Math.Min(dInfo.DmgAmount, penetrateResist); //对该部位造成的单次伤害，始终不会大于穿透阈值
                     //dInfo.DmgAmount = Math.Min(remainPierce, dInfo.DmgAmount);
                     dInfo.Pierce = remainPierce;
                 }
@@ -404,7 +421,7 @@ namespace Gongfu_World_Console.Scripts
                     if (remainPierceAndDamage > 0) //不完全穿透，需要依靠Damage来补足Pierce
                     {
                         dmgRes.IsPenetrated = true;
-                        dmgRes.DmgDealt = Math.Min(dInfo.DmgAmount, part.PenetrateResistTotal);
+                        dmgRes.DmgDealt = Math.Min(dInfo.DmgAmount, penetrateResist);
                         dInfo.DmgAmount += remainPierce; //造成的穿透伤害 = 原总伤害 - 补足穿透部分消耗的伤害
                     }
                     else //不穿透
@@ -439,7 +456,7 @@ namespace Gongfu_World_Console.Scripts
 
             if (part.BodyPartDef.CanPenetrate) //如果该部位允许穿透
             {
-                int penetrateResist = (int)(part.PenetrateResistTotal * (1 - dInfo.Ignore));
+                int penetrateResist = (int)(part.PenetrateResistTotal * (1 - dInfo.Ignore) * dInfo.DmgDef.WoundSize);
                 int remainDamage = dInfo.DmgAmount - penetrateResist;
 
                 if (remainDamage > 0) //有部分伤害穿透
@@ -521,7 +538,6 @@ namespace Gongfu_World_Console.Scripts
             {
                 foreach (var dInfo in dmgList)
                 {
-                    DebugTool.DmgDebug.DInfoCount++;
                     TakeDamage(dInfo, victim);
                 }
             }

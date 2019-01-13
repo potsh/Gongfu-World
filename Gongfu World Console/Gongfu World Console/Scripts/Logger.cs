@@ -156,6 +156,8 @@ namespace Gongfu_World_Console.Scripts
 
         private static LoggerInstance _csv;
 
+        private static LoggerInstance _dmg_csv;
+
         private Logger() { }
 
         /// <summary>
@@ -206,6 +208,19 @@ namespace Gongfu_World_Console.Scripts
             }
         }
 
+        public static LoggerInstance DmgCsv
+        {
+            get
+            {
+                if (_dmg_csv == null)
+                {
+                    //logFileName = Guid.NewGuid() + ".log";
+                    _dmg_csv = new LoggerInstance(Find.LogPath + "Damage_Debug.csv", isOverWrite: true);
+                    _dmg_csv.LogType = LogType.Csv;
+                }
+                return _dmg_csv;
+            }
 
+        }
     }
 }

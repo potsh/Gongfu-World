@@ -18,7 +18,7 @@ namespace Gongfu_World_Console.Scripts
 
         public static Dictionary<object, CharacterData> CharacterTableData;
 
-
+        public static Dictionary<object, DamageDef> DamageDefData;
 
         public static bool LoadData()
         {
@@ -49,6 +49,12 @@ namespace Gongfu_World_Console.Scripts
 
             CharacterTableData = (Dictionary<object, CharacterData>)CsvUtil<CharacterData>.LoadObjectsToDict<CharacterData>(Find.DataCsvPath + "CharacterData.csv");
             if (CharacterTableData == null)
+            {
+                return false;
+            }
+
+            DamageDefData = (Dictionary<object, DamageDef>)CsvUtil<DamageDef>.LoadObjectsToDict<DamageDef>(Find.DataCsvPath + "DamageDef.csv");
+            if (DamageDefData == null)
             {
                 return false;
             }
@@ -91,14 +97,22 @@ namespace Gongfu_World_Console.Scripts
         private static void CalcCoverageRecursively(BodyPartDef part)
         {
             //BodyPartDef root = BodyPartDefData[BodyPartEnum.Body];
-            float totalCoverageOfChildren = 0;
-            foreach (BodyPartDef childPart in part.Children)
+            if (part.Children != null && part.Children.Count > 0)
             {
-                totalCoverageOfChildren += childPart.CoverageAbsWithChildren;
-                CalcCoverageRecursively(childPart);
+                float totalCoverageOfChildren = 0;
+                foreach (BodyPartDef childPart in part.Children)
+                {
+                    totalCoverageOfChildren += childPart.CoverageWithChildren;
+                    CalcCoverageRecursively(childPart);
+                }
+
+                part.Coverage = 1 - totalCoverageOfChildren;
+            }
+            else
+            {
+                part.Coverage = part.CoverageWithChildren;
             }
 
-            part.Coverage = 1 - totalCoverageOfChildren;
         }
 
         private static void CalcCoverageAbsRecursively(BodyPartDef part)
@@ -111,12 +125,23 @@ namespace Gongfu_World_Console.Scripts
             else
             {
                 part.CoverageAbsWithChildren = part.Parent.CoverageAbsWithChildren * part.CoverageWithChildren;
-                part.CoverageAbs = part.Parent.CoverageAbsWithChildren * part.Coverage;
+                part.CoverageAbs = part.Parent.CoverageAbsWithChildren * part.Coverage;          
+            }
 
-                foreach (var child in part.Children)
-                {
-                    CalcCoverageAbsRecursively(child);
-                }                
+            foreach (var child in part.Children)
+            {
+                CalcCoverageAbsRecursively(child);
+            }
+        }
+
+
+
+        public static void DebugPrintPartCoverage()
+        {
+            Logger.Csv.WriteLog($"Part,CoverageWithChildren,Coverage,CoverageAbsWithChildren,CoverageAbs");
+            foreach (var p in BodyPartDefData.Values)
+            {
+                Logger.Csv.WriteLog($"{p.Name},{p.CoverageWithChildren:0.0000},{p.Coverage:0.0000},{p.CoverageAbsWithChildren:0.0000},{p.CoverageAbs:0.0000}");
             }
         }
     }

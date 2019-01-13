@@ -118,5 +118,7 @@ namespace Gongfu_World_Console.Scripts
             Ch = ch;
             Init();
         }
+
+
     }
 }

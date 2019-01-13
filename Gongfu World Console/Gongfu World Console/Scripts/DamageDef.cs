@@ -18,11 +18,16 @@ namespace Gongfu_World_Console.Scripts
         Energy,
     }
 
+    [JsonConverter(typeof(StringEnumConverter))]
     public class DamageDef
     {
         public DamageType DmgType;
 
-        public float Ignore;
+//        public float ScorePerDmg;
+
+//        public float Ignore;
+
+        public float WoundSize;
 
         public bool CauseBleed;
     }

@@ -24,6 +24,13 @@ namespace Gongfu_World_Console.Scripts
         public BodyPart Parent;
 
         [JsonIgnore]
+        public BodyPart SymmetryPart => BodyPartDef.SymmetryPart == BodyPartEnum.Undefined ? null : Body.AllBodyParts[BodyPartDef.SymmetryPart];
+
+        [JsonIgnore]
+        public bool CauseDead => (BodyPartDef.IsLethalAfterDestroyed && (IsDestroyed && SymmetryPart == null)) ||
+                                 (BodyPartDef.IsLethalAfterDestroyed && (IsDestroyed && SymmetryPart != null && SymmetryPart.IsDestroyed));
+
+        [JsonIgnore]
         public List<BodyPart> Children = new List<BodyPart>();
 
         public bool IsDestroyed => Hp <= 0;

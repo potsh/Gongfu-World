@@ -36,14 +36,18 @@ namespace Gongfu_World_Console
 
             CharacterData ch1 = Data.CharacterTableData.Values.ToArray()[0];
             CharacterData ch2 = Data.CharacterTableData.Values.ToArray()[1];
-            CharacterData ch3 = Data.CharacterTableData.Values.ToArray()[0];
-            CharacterData ch4 = Data.CharacterTableData.Values.ToArray()[1];
+            CharacterData ch3 = Data.CharacterTableData.Values.ToArray()[2];
+            CharacterData ch4 = Data.CharacterTableData.Values.ToArray()[3];
 
             //DebugTool.Debug_DeathMatch_Statistics(ch1, ch2, 1000, true);
 
-            DebugTool.Debug_ArmorTest_Statistics(ch1, ch2, 0, 60, 1000);
+            DebugTool.Debug_ArmorTest_Statistics(ch3, ch4, 0, 120, 1000);
 
-            //DebugTool.Debug_ArmorTest_Once(ch1, ch2, 48, 1, true);
+            //DebugTool.Debug_ArmorTest_Once(ch1, ch2, 35, 1, true);
+
+            //Data.DebugPrintPartCoverage();
+
+
 
 
             //List<GongfaDef> gongfaDefList = CsvUtil<GongfaDef>.LoadObjects<GongfaDef>(gongfaDefPath);
@@ -66,17 +70,17 @@ namespace Gongfu_World_Console
 
 
 
-            //            JsonSerializerSettings jsSeting =  new JsonSerializerSettings
-            //                {
-            //                NullValueHandling = NullValueHandling.Ignore, TypeNameHandling = TypeNameHandling.None,
-            //                DefaultValueHandling = DefaultValueHandling.Ignore               
-            //            };
-            //            string jsonData = JsonConvert.SerializeObject(ch1, Formatting.Indented, jsSeting);
-            //            Console.WriteLine(jsonData);
-            //
-            //            Console.WriteLine("############################################################################");
-            //            jsonData = JsonConvert.SerializeObject(ch2, Formatting.Indented, jsSeting);
-            //            Console.WriteLine(jsonData);
+//            JsonSerializerSettings jsSeting =  new JsonSerializerSettings
+//                {
+//                NullValueHandling = NullValueHandling.Ignore, TypeNameHandling = TypeNameHandling.None,
+//                DefaultValueHandling = DefaultValueHandling.Ignore               
+//            };
+//            string jsonData = JsonConvert.SerializeObject(Data.BodyPartDefData[BodyPartEnum.Body], Formatting.Indented, jsSeting);
+//            Console.WriteLine(jsonData);
+            
+//            Console.WriteLine("############################################################################");
+//            jsonData = JsonConvert.SerializeObject(ch2, Formatting.Indented, jsSeting);
+//            Console.WriteLine(jsonData);
 
             //File.WriteAllText(dataPath + ch.Name + ".json", jsonData);
 

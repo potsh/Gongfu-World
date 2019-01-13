@@ -22,6 +22,7 @@ namespace Gongfu_World_Console.Scripts
         public BodyPartEnum ParentName;
 
         [ByCalc]
+        [JsonIgnore]
         public BodyPartDef Parent;
 
         [ByCalc]
@@ -63,6 +64,9 @@ namespace Gongfu_World_Console.Scripts
         public float DirectPierceProb;
 
         public int PenetrateResist;
+
+
+
 
     }
 }
