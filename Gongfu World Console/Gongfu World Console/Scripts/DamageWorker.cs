@@ -219,20 +219,20 @@ namespace Gongfu_World_Console.Scripts
             {
                 case DamageType.Pierce:
                 case DamageType.Cut:
-                    calcPenetrateResult = new CalcPenetrateResult(CalcSharpResult);
                     penetrateArmor = new PenetrateArmor(PenetrateArmorSharp);
+                    calcPenetrateResult = new CalcPenetrateResult(CalcSharpResult);
                     break;
                 case DamageType.Blunt:
-                    calcPenetrateResult = new CalcPenetrateResult(CalcIgnoreResult);
                     penetrateArmor = new PenetrateArmor(PenetrateArmorIgnore);
+                    calcPenetrateResult = new CalcPenetrateResult(CalcIgnoreResult);
                     break;
                 case DamageType.Energy:
-                    calcPenetrateResult = new CalcPenetrateResult(CalcIgnoreResult);
                     penetrateArmor = new PenetrateArmor(PenetrateArmorIgnore);
+                    calcPenetrateResult = new CalcPenetrateResult(CalcIgnoreResult);
                     break;
                 default:
-                    calcPenetrateResult = new CalcPenetrateResult(CalcSharpResult);
                     penetrateArmor = new PenetrateArmor(PenetrateArmorSharp);
+                    calcPenetrateResult = new CalcPenetrateResult(CalcSharpResult);
                     break;
             }
 
@@ -285,7 +285,7 @@ namespace Gongfu_World_Console.Scripts
                         {
                             DmgAmount = dmgResult.OverkillHp
                         };
-                        ApplyDamageRecursively(dInfo, curPart.Parent, calcPenetrateResult);
+                        ApplyDamageRecursively(overkillDmgInfo, curPart.Parent, calcPenetrateResult);
                     }
                 }
 
@@ -543,7 +543,10 @@ namespace Gongfu_World_Console.Scripts
             }
         }
 
-
+        public bool IsMissBySpeed(DamageInfo dInfo)
+        {
+            return false;
+        }
 
 
 

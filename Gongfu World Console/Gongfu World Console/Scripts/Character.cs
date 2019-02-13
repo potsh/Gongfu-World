@@ -10,6 +10,8 @@ public class Character
 
     public CharPrimaryAttr PrimaryAttr;
 
+    public CharSecondaryAttr SecondaryAttr;
+
     public CharHealth Health;
 
     public CharEnergy Energy;

@@ -46,7 +46,7 @@ namespace Gongfu_World_Console.Scripts
 
         public int BasePower;
         public int BaseSpeed;
-        public int BaseClever;
+        public int BaseCunning;
 
         public float TgtArea_Up;
         public float TgtArea_Middle;

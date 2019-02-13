@@ -39,6 +39,6 @@ namespace Gongfu_World_Console
 
         public int Power => (int)(GongfaDef.BasePower * Efficiency);
         public int Speed => (int)(GongfaDef.BaseSpeed * Efficiency);
-        public int Clever => (int)(GongfaDef.BaseClever * Efficiency);
+        public int Clever => (int)(GongfaDef.BaseCunning * Efficiency);
     }
 }
